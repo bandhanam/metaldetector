@@ -60,3 +60,7 @@ Real-time Gold, Silver & Copper price prediction dashboard powered by AI, news s
 - `npm run build` — Production build
 - `npm run test` — Run unit tests
 - `npm run refresh` — Clear cached data (forces fresh fetch on next load)
+
+## Note
+
+> This application uses GPT-4o to fetch approximate daily metal prices for all 5 markets. Since GPT-4o's training data has a cutoff, the prompt includes current market context (as of March 2026) to ensure accurate pricing. If prices drift significantly, update the expected ranges in `src/lib/prices.ts`. Data is fetched once daily and cached in PostgreSQL — no repeated API calls.
