@@ -1,11 +1,23 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Metal Detector - Precious Metal Price Predictions",
+  title: "Metal Detector - Live Gold, Silver & Copper Prices India",
   description:
-    "AI-powered Gold, Silver & Copper price predictions based on global news sentiment analysis",
-  keywords: ["gold price", "silver price", "copper price", "prediction", "metal market"],
+    "Live gold price today in India per 10 gram. AI-powered Gold, Silver & Copper price predictions with real-time rates and market analysis.",
+  keywords: [
+    "gold price today",
+    "gold rate today India",
+    "silver price today",
+    "copper price",
+    "gold prediction",
+    "silver rate India",
+    "metal price live",
+    "24 karat gold rate",
+    "MCX gold",
+    "gold price per 10 gram",
+  ],
 };
 
 export default function RootLayout({
@@ -21,7 +33,15 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="antialiased min-h-screen">{children}</body>
+      <body className="antialiased min-h-screen">
+        {children}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5999335789424982"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </body>
     </html>
   );
 }

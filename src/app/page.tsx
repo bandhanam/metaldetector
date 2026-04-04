@@ -15,6 +15,7 @@ const MarketTable = dynamic(() => import("@/components/MarketTable"), { ssr: fal
 const NewsFeed = dynamic(() => import("@/components/NewsFeed"), { ssr: false });
 const SentimentChart = dynamic(() => import("@/components/SentimentChart"), { ssr: false });
 const ComparisonChart = dynamic(() => import("@/components/ComparisonChart"), { ssr: false });
+const AdBanner = dynamic(() => import("@/components/AdBanner"), { ssr: false });
 
 interface AppState {
   data: DashboardData | null;
@@ -131,6 +132,11 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Ad: Below Hero */}
+      <div className="max-w-7xl mx-auto px-4 pt-3">
+        <AdBanner slot="1234567890" format="horizontal" className="rounded-xl overflow-hidden" />
+      </div>
+
       <main className="max-w-7xl mx-auto px-4 pt-4 md:pt-6">
         {/* Error Banner */}
         {state.error && (
@@ -205,6 +211,9 @@ export default function Dashboard() {
 
                 <PredictionChart prediction={selected} market={selectedMarket} />
 
+                {/* Ad: Between chart and table */}
+                <AdBanner slot="2345678901" format="horizontal" className="rounded-xl overflow-hidden" />
+
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                   <div className="lg:col-span-2">
                     <PredictionTable prediction={selected} market={selectedMarket} />
@@ -247,6 +256,11 @@ export default function Dashboard() {
         )}
       </main>
 
+      {/* Ad: Before disclaimer */}
+      <div className="max-w-7xl mx-auto px-4 mt-6">
+        <AdBanner slot="3456789012" format="horizontal" className="rounded-xl overflow-hidden" />
+      </div>
+
       {/* Disclaimer */}
       <div className="max-w-7xl mx-auto px-4 mt-8 md:mt-10">
         <div className="rounded-xl border border-amber-500/15 bg-amber-500/5 p-4 md:p-5">
@@ -276,6 +290,13 @@ export default function Dashboard() {
           <p>
             Units: Gold per 10g · Silver per kg · Copper per kg · Realtime live prices
           </p>
+        </div>
+        <div className="flex items-center justify-center gap-4 mt-3 text-xs text-[var(--text-secondary)]">
+          <a href="/privacy" className="hover:text-amber-400 transition-colors">Privacy Policy</a>
+          <span>·</span>
+          <a href="/terms" className="hover:text-amber-400 transition-colors">Terms of Service</a>
+          <span>·</span>
+          <a href="/about" className="hover:text-amber-400 transition-colors">About</a>
         </div>
       </footer>
     </div>
