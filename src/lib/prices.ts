@@ -69,11 +69,18 @@ function convertToLocalPrices(spot: MetalSpotUSD, fx: ExchangeRates): AllCountry
   const silverPerKgUSD = (spot.silver_per_oz / TROY_OZ_TO_GRAMS) * 1000;
   const copperPerKgUSD = spot.copper_per_lb * LB_TO_KG;
 
-  const INDIA_PREMIUM = 1.15;
+  // India premiums: 6% import duty (post July 2024) + 3% GST + AIDC + landing costs
+  const INDIA_GOLD_PREMIUM = 1.071;
+  const INDIA_SILVER_PREMIUM = 1.14;
+  const INDIA_COPPER_PREMIUM = 1.085;
 
   return {
     US: { gold: round(goldPer10gUSD), silver: round(silverPerKgUSD), copper: round(copperPerKgUSD) },
-    IN: { gold: round(goldPer10gUSD * fx.INR * INDIA_PREMIUM), silver: round(silverPerKgUSD * fx.INR * INDIA_PREMIUM), copper: round(copperPerKgUSD * fx.INR * INDIA_PREMIUM) },
+    IN: {
+      gold: round(goldPer10gUSD * fx.INR * INDIA_GOLD_PREMIUM),
+      silver: round(silverPerKgUSD * fx.INR * INDIA_SILVER_PREMIUM),
+      copper: round(copperPerKgUSD * fx.INR * INDIA_COPPER_PREMIUM),
+    },
     CN: { gold: round(goldPer10gUSD * fx.CNY), silver: round(silverPerKgUSD * fx.CNY), copper: round(copperPerKgUSD * fx.CNY) },
     EU: { gold: round(goldPer10gUSD * fx.EUR), silver: round(silverPerKgUSD * fx.EUR), copper: round(copperPerKgUSD * fx.EUR) },
     JP: { gold: round(goldPer10gUSD * fx.JPY), silver: round(silverPerKgUSD * fx.JPY), copper: round(copperPerKgUSD * fx.JPY) },
@@ -82,11 +89,11 @@ function convertToLocalPrices(spot: MetalSpotUSD, fx: ExchangeRates): AllCountry
 
 function getFallback(): AllCountryPrices {
   return {
-    IN: { gold: 149000, silver: 235000, copper: 920 },
-    CN: { gold: 12000, silver: 20000, copper: 78 },
-    US: { gold: 1650, silver: 2750, copper: 11 },
-    EU: { gold: 1500, silver: 2500, copper: 10 },
-    JP: { gold: 248000, silver: 415000, copper: 2000 },
+    IN: { gold: 150144, silver: 250000, copper: 1240 },
+    CN: { gold: 10360, silver: 16170, copper: 85 },
+    US: { gold: 1503, silver: 2347, copper: 12.3 },
+    EU: { gold: 1304, silver: 2036, copper: 10.7 },
+    JP: { gold: 239900, silver: 374600, copper: 1962 },
   };
 }
 
