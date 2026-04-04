@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,6 +17,22 @@ export const metadata: Metadata = {
     "MCX gold",
     "gold price per 10 gram",
   ],
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Metal Detector",
+  },
+  icons: {
+    icon: "/icons/favicon.png",
+    apple: "/icons/icon-192.png",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#FFD700",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

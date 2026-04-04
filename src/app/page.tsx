@@ -60,6 +60,12 @@ export default function Dashboard() {
     fetchData();
   }, [fetchData]);
 
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
+  }, []);
+
   const selectedMarket = state.data?.markets.find(
     (m) => m.countryCode === selectedCountry
   ) || state.data?.markets[0];
