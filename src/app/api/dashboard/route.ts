@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { initDatabase } from "@/lib/db";
-import { initCacheTable, getCachedDashboardData, setCachedDashboardData } from "@/lib/cache";
 import { getNews } from "@/lib/news";
 import { fetchCurrentPrices, getMarketData } from "@/lib/prices";
 import { generatePredictions } from "@/lib/predictions";
@@ -11,17 +10,6 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     await initDatabase();
-    await initCacheTable();
-
-    const cached = await getCachedDashboardData();
-    if (cached) {
-      return NextResponse.json({
-        success: true,
-        data: cached,
-        cached: true,
-        message: "Serving cached data from today",
-      });
-    }
 
     const [news, prices] = await Promise.all([
       getNews(),
@@ -39,13 +27,11 @@ export async function GET() {
       lastUpdated: new Date().toISOString(),
     };
 
-    await setCachedDashboardData(dashboardData);
-
     return NextResponse.json({
       success: true,
       data: dashboardData,
       cached: false,
-      message: "Fresh data generated and cached",
+      message: "Live data",
     });
   } catch (error) {
     console.error("Dashboard API error:", error);

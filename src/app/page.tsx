@@ -20,7 +20,6 @@ interface AppState {
   data: DashboardData | null;
   loading: boolean;
   error: string | null;
-  cached: boolean;
 }
 
 export default function Dashboard() {
@@ -28,7 +27,6 @@ export default function Dashboard() {
     data: null,
     loading: true,
     error: null,
-    cached: false,
   });
   const [selectedMetal, setSelectedMetal] = useState<number>(0);
   const [selectedCountry, setSelectedCountry] = useState<string>("IN");
@@ -47,7 +45,6 @@ export default function Dashboard() {
         data: result.data,
         loading: false,
         error: null,
-        cached: result.cached || false,
       });
     } catch {
       setState((prev) => ({
@@ -92,12 +89,10 @@ export default function Dashboard() {
               {state.data?.lastUpdated && (
                 <div className="hidden md:flex flex-col items-end text-[10px] text-[var(--text-secondary)]">
                   <span>Updated: {new Date(state.data.lastUpdated).toLocaleTimeString()}</span>
-                  {state.cached && (
-                    <span className="text-blue-400 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-                      Cached (refreshes daily)
-                    </span>
-                  )}
+                  <span className="text-green-400 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                    Live prices
+                  </span>
                 </div>
               )}
               <button
@@ -279,7 +274,7 @@ export default function Dashboard() {
             Metal Detector — AI-Powered Intelligent Metal Price Forecast System
           </p>
           <p>
-            Units: Gold per 10g · Silver per kg · Copper per kg · Data refreshes daily
+            Units: Gold per 10g · Silver per kg · Copper per kg · Realtime live prices
           </p>
         </div>
       </footer>

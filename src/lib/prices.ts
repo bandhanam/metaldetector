@@ -1,9 +1,7 @@
 import { MetalPrice, MarketData } from "@/types";
-import { query } from "./db";
 
-if (typeof process !== "undefined") {
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-}
+const TROY_OZ_TO_GRAMS = 31.1035;
+const LB_TO_KG = 2.20462;
 
 interface AllCountryPrices {
   IN: { gold: number; silver: number; copper: number };
@@ -13,154 +11,102 @@ interface AllCountryPrices {
   JP: { gold: number; silver: number; copper: number };
 }
 
-// ─── Read from DB (cached within 24h) ───
-async function getStoredPrices(): Promise<MetalPrice[] | null> {
+interface ExchangeRates {
+  INR: number;
+  CNY: number;
+  EUR: number;
+  JPY: number;
+}
+
+interface MetalSpotUSD {
+  gold_per_oz: number;
+  silver_per_oz: number;
+  copper_per_lb: number;
+}
+
+// ─── Fetch LIVE spot prices from MetalMetric (free, no key, 60s refresh) ───
+async function fetchLiveSpotPrices(): Promise<MetalSpotUSD | null> {
   try {
-    const result = await query(
-      `SELECT metal, price_usd, price_inr, price_cny, price_eur, price_jpy, source, fetched_at
-       FROM metal_prices
-       WHERE fetched_at > NOW() - INTERVAL '24 hours'
-       ORDER BY fetched_at DESC`
+    const res = await fetch(
+      "https://metalmetric.com/api/gpt?action=spot_prices&metal=all",
+      { signal: AbortSignal.timeout(8000), cache: "no-store" }
     );
-    if (result.rows.length < 3) return null;
-
-    const seen = new Set<string>();
-    const prices: MetalPrice[] = [];
-    for (const row of result.rows) {
-      if (seen.has(row.metal)) continue;
-      seen.add(row.metal);
-      prices.push({
-        metal: row.metal,
-        price_usd: parseFloat(row.price_usd),
-        price_inr: parseFloat(row.price_inr),
-        price_cny: parseFloat(row.price_cny),
-        price_eur: parseFloat(row.price_eur),
-        price_jpy: parseFloat(row.price_jpy),
-        timestamp: row.fetched_at?.toISOString() || new Date().toISOString(),
-        source: row.source || "db",
-      });
-    }
-    return prices.length >= 3 ? prices : null;
-  } catch {
-    return null;
-  }
-}
-
-// ─── Store in DB ───
-async function storePrices(prices: MetalPrice[]): Promise<void> {
-  try {
-    for (const p of prices) {
-      await query(
-        `INSERT INTO metal_prices (metal, price_usd, price_inr, price_cny, price_eur, price_jpy, source)
-         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-        [p.metal, p.price_usd, p.price_inr, p.price_cny, p.price_eur, p.price_jpy, p.source]
-      );
-    }
-  } catch (err) {
-    console.error("[PRICES] DB store failed:", err);
-  }
-}
-
-// ─── Fetch REAL country-wise prices from OpenAI GPT-4o (once daily) ───
-async function fetchFromOpenAI(): Promise<AllCountryPrices | null> {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) return null;
-
-  const today = new Date().toISOString().split("T")[0];
-
-  const prompt = `You are a commodities market expert. Today is ${today}.
-
-CRITICAL: Precious metals have surged massively in 2025-2026 due to global trade wars, tariffs, geopolitical tensions, and central bank buying. Do NOT use your 2024/early-2025 training data prices.
-
-ACTUAL PRICES AS OF MARCH 2026:
-- Gold in India: ₹149,000 per 10g (international ~$5,100/troy oz)
-- Silver in India: ₹235,000 per kg (international ~$85/troy oz)
-- Both metals have roughly doubled from early 2025 levels
-
-Return metal prices in LOCAL CURRENCY for 5 countries.
-
-OUTPUT UNITS:
-- Gold: per 10 grams (24K)
-- Silver: per 1 kilogram
-- Copper: per 1 kilogram
-
-CURRENT MARCH 2026 RANGES (your output MUST be within these):
-
-INDIA (INR):
-  Gold: 146000-153000 per 10g | Silver: 230000-245000 per kg | Copper: 850-1000 per kg
-
-CHINA (CNY):
-  Gold: 11500-12500 per 10g | Silver: 19000-21000 per kg | Copper: 75-85 per kg
-
-USA (USD):
-  Gold: 1600-1700 per 10g | Silver: 2650-2850 per kg | Copper: 10-13 per kg
-
-EU (EUR):
-  Gold: 1450-1550 per 10g | Silver: 2400-2600 per kg | Copper: 9-12 per kg
-
-JAPAN (JPY):
-  Gold: 240000-260000 per 10g | Silver: 400000-430000 per kg | Copper: 1800-2200 per kg
-
-RULES:
-- Each country has its own premiums, taxes, and trading conventions
-- India includes ~15% import duty + 3% GST
-- Your output numbers MUST fall within the ranges above
-- Do NOT return 2024 or early 2025 prices
-
-Return ONLY this JSON (no markdown, no explanation):
-{"IN":{"gold":0,"silver":0,"copper":0},"CN":{"gold":0,"silver":0,"copper":0},"US":{"gold":0,"silver":0,"copper":0},"EU":{"gold":0,"silver":0,"copper":0},"JP":{"gold":0,"silver":0,"copper":0}}`;
-
-  try {
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o",
-        messages: [
-          { role: "system", content: "You are a commodities market data expert. Return ONLY valid JSON. No markdown fences, no explanation, no text before or after the JSON." },
-          { role: "user", content: prompt },
-        ],
-        temperature: 0,
-        max_tokens: 400,
-      }),
-      signal: AbortSignal.timeout(25000),
-    });
-
     if (!res.ok) {
-      console.error("[PRICES] OpenAI error:", res.status);
+      console.error("[PRICES] MetalMetric API error:", res.status);
       return null;
     }
-
     const data = await res.json();
-    const content = data.choices?.[0]?.message?.content?.trim();
-    if (!content) return null;
-
-    const jsonStr = content.replace(/```json\n?/g, "").replace(/```/g, "").trim();
-    const parsed: AllCountryPrices = JSON.parse(jsonStr);
-
-    if (
-      parsed.IN?.gold > 130000 && parsed.IN?.gold < 170000 &&
-      parsed.US?.gold > 1400 && parsed.US?.gold < 2000 &&
-      parsed.IN?.silver > 200000 && parsed.IN?.silver < 280000
-    ) {
-      console.log("[PRICES] GPT-4o real country prices →");
-      console.log(`  India:  Gold ₹${parsed.IN.gold}/10g, Silver ₹${parsed.IN.silver}/kg, Copper ₹${parsed.IN.copper}/kg`);
-      console.log(`  US:     Gold $${parsed.US.gold}/10g, Silver $${parsed.US.silver}/kg, Copper $${parsed.US.copper}/kg`);
-      console.log(`  China:  Gold ¥${parsed.CN.gold}/10g, Silver ¥${parsed.CN.silver}/kg, Copper ¥${parsed.CN.copper}/kg`);
-      console.log(`  EU:     Gold €${parsed.EU.gold}/10g, Silver €${parsed.EU.silver}/kg, Copper €${parsed.EU.copper}/kg`);
-      console.log(`  Japan:  Gold ¥${parsed.JP.gold}/10g, Silver ¥${parsed.JP.silver}/kg, Copper ¥${parsed.JP.copper}/kg`);
-      return parsed;
+    const p = data?.prices;
+    if (!p?.gold?.price_per_oz || !p?.silver?.price_per_oz || !p?.copper?.price_per_lb) {
+      console.error("[PRICES] MetalMetric unexpected shape:", data);
+      return null;
     }
-
-    console.warn("[PRICES] OpenAI returned suspicious values:", parsed);
-    return null;
+    console.log(`[PRICES] Live spot → Gold $${p.gold.price_per_oz}/oz, Silver $${p.silver.price_per_oz}/oz, Copper $${p.copper.price_per_lb}/lb`);
+    return {
+      gold_per_oz: p.gold.price_per_oz,
+      silver_per_oz: p.silver.price_per_oz,
+      copper_per_lb: p.copper.price_per_lb,
+    };
   } catch (err) {
-    console.error("[PRICES] OpenAI fetch error:", err);
+    console.error("[PRICES] MetalMetric fetch error:", err);
     return null;
   }
+}
+
+// ─── Fetch live exchange rates (free, no key) ───
+async function fetchExchangeRates(): Promise<ExchangeRates | null> {
+  try {
+    const res = await fetch(
+      "https://open.er-api.com/v6/latest/USD",
+      { signal: AbortSignal.timeout(8000), cache: "no-store" }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    const r = data?.rates;
+    if (!r?.INR || !r?.CNY || !r?.EUR || !r?.JPY) return null;
+    return { INR: r.INR, CNY: r.CNY, EUR: r.EUR, JPY: r.JPY };
+  } catch (err) {
+    console.error("[PRICES] Exchange rate fetch error:", err);
+    return null;
+  }
+}
+
+// Output units: Gold per 10g, Silver per kg, Copper per kg
+function convertToLocalPrices(spot: MetalSpotUSD, fx: ExchangeRates): AllCountryPrices {
+  const goldPer10gUSD = (spot.gold_per_oz / TROY_OZ_TO_GRAMS) * 10;
+  const silverPerKgUSD = (spot.silver_per_oz / TROY_OZ_TO_GRAMS) * 1000;
+  const copperPerKgUSD = spot.copper_per_lb * LB_TO_KG;
+
+  // India: ~10% import duty + 3% GST + ~2% premium
+  const INDIA_PREMIUM = 1.15;
+
+  return {
+    US: {
+      gold: round(goldPer10gUSD),
+      silver: round(silverPerKgUSD),
+      copper: round(copperPerKgUSD),
+    },
+    IN: {
+      gold: round(goldPer10gUSD * fx.INR * INDIA_PREMIUM),
+      silver: round(silverPerKgUSD * fx.INR * INDIA_PREMIUM),
+      copper: round(copperPerKgUSD * fx.INR * INDIA_PREMIUM),
+    },
+    CN: {
+      gold: round(goldPer10gUSD * fx.CNY),
+      silver: round(silverPerKgUSD * fx.CNY),
+      copper: round(copperPerKgUSD * fx.CNY),
+    },
+    EU: {
+      gold: round(goldPer10gUSD * fx.EUR),
+      silver: round(silverPerKgUSD * fx.EUR),
+      copper: round(copperPerKgUSD * fx.EUR),
+    },
+    JP: {
+      gold: round(goldPer10gUSD * fx.JPY),
+      silver: round(silverPerKgUSD * fx.JPY),
+      copper: round(copperPerKgUSD * fx.JPY),
+    },
+  };
 }
 
 function getFallback(): AllCountryPrices {
@@ -173,20 +119,25 @@ function getFallback(): AllCountryPrices {
   };
 }
 
-// ─── Main: DB → OpenAI GPT-4o (once daily) → fallback ───
+// ─── Main: Always fetch live, fallback only on failure ───
 export async function fetchCurrentPrices(): Promise<MetalPrice[]> {
-  const stored = await getStoredPrices();
-  if (stored) {
-    console.log("[PRICES] Serving from DB cache");
-    return stored;
+  let all: AllCountryPrices;
+  let source: string;
+
+  const [spot, fx] = await Promise.all([fetchLiveSpotPrices(), fetchExchangeRates()]);
+
+  if (spot && fx) {
+    all = convertToLocalPrices(spot, fx);
+    source = "live-api";
+  } else {
+    all = getFallback();
+    source = "fallback";
+    console.warn("[PRICES] Live APIs failed, using fallback prices");
   }
 
-  const openaiResult = await fetchFromOpenAI();
-  const all = openaiResult || getFallback();
-  const source = openaiResult ? "gpt-4o" : "fallback";
   const timestamp = new Date().toISOString();
 
-  const prices: MetalPrice[] = [
+  return [
     {
       metal: "gold",
       price_usd: round(all.US.gold),
@@ -218,9 +169,6 @@ export async function fetchCurrentPrices(): Promise<MetalPrice[]> {
       source,
     },
   ];
-
-  storePrices(prices).catch((e) => console.error("[PRICES] Store error:", e));
-  return prices;
 }
 
 export function getMarketData(prices: MetalPrice[]): MarketData[] {
