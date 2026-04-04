@@ -5,6 +5,7 @@ const connectionString =
   "postgresql://healthpulseuser:psQtlRm7_LMKb0c82GMy6w@healthpulse-21422.j77.aws-ap-south-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full";
 
 let pool: Pool | null = null;
+let dbInitialized = false;
 
 export function getPool(): Pool {
   if (!pool) {
@@ -13,13 +14,15 @@ export function getPool(): Pool {
       ssl: { rejectUnauthorized: false },
       max: 5,
       idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 10000,
+      connectionTimeoutMillis: 5000,
     });
   }
   return pool;
 }
 
 export async function initDatabase(): Promise<void> {
+  if (dbInitialized) return;
+
   const db = getPool();
 
   await db.query(`
@@ -40,6 +43,8 @@ export async function initDatabase(): Promise<void> {
   await db.query(`
     CREATE INDEX IF NOT EXISTS idx_news_published ON news_articles(published_at DESC)
   `);
+
+  dbInitialized = true;
 }
 
 export async function query(text: string, params?: unknown[]) {

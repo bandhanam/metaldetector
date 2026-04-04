@@ -64,8 +64,14 @@ function detectCountries(text: string): string[] {
   return countries;
 }
 
-// ─── STEP 1: Read from DB ───
+let newsCache: { data: NewsArticle[]; at: number } | null = null;
+const NEWS_CACHE_TTL_MS = 5 * 60_000;
+
 export async function getNews(): Promise<NewsArticle[]> {
+  if (newsCache && Date.now() - newsCache.at < NEWS_CACHE_TTL_MS) {
+    return newsCache.data;
+  }
+
   try {
     const result = await query(
       `SELECT title, description, url, source, published_at, sentiment, relevant_metals, relevant_countries
@@ -76,7 +82,7 @@ export async function getNews(): Promise<NewsArticle[]> {
     );
 
     if (result.rows.length >= 5) {
-      return result.rows.map((row) => ({
+      const articles = result.rows.map((row) => ({
         title: row.title,
         description: row.description || "",
         url: row.url || "",
@@ -86,13 +92,16 @@ export async function getNews(): Promise<NewsArticle[]> {
         relevantMetals: row.relevant_metals || [],
         relevantCountries: row.relevant_countries || [],
       }));
+      newsCache = { data: articles, at: Date.now() };
+      return articles;
     }
   } catch {
     // DB read failed, fall through to fetch
   }
 
-  // DB empty or stale → fetch once, store, return
-  return await fetchAndStoreNews();
+  const articles = await fetchAndStoreNews();
+  newsCache = { data: articles, at: Date.now() };
+  return articles;
 }
 
 // ─── STEP 2: One API call → store in DB → return ───
@@ -138,16 +147,23 @@ export async function fetchAndStoreNews(): Promise<NewsArticle[]> {
 
   articles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
-  // Store in DB
   if (articles.length > 0) {
     try {
       await query(`DELETE FROM news_articles`);
 
-      for (const a of articles) {
+      const BATCH = 25;
+      for (let i = 0; i < articles.length; i += BATCH) {
+        const batch = articles.slice(i, i + BATCH);
+        const values: unknown[] = [];
+        const placeholders = batch.map((a, idx) => {
+          const offset = idx * 8;
+          values.push(a.title, a.description, a.url, a.source, a.publishedAt, a.sentiment, a.relevantMetals, a.relevantCountries);
+          return `($${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 4}, $${offset + 5}, $${offset + 6}, $${offset + 7}, $${offset + 8})`;
+        });
         await query(
           `INSERT INTO news_articles (title, description, url, source, published_at, sentiment, relevant_metals, relevant_countries)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-          [a.title, a.description, a.url, a.source, a.publishedAt, a.sentiment, a.relevantMetals, a.relevantCountries]
+           VALUES ${placeholders.join(", ")}`,
+          values
         );
       }
     } catch (err) {

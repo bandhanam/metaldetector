@@ -187,16 +187,24 @@ function generateFactors(
   return factors.slice(0, 7);
 }
 
+let predictionCache: { key: string; data: PricePrediction[]; at: number } | null = null;
+const PREDICTION_CACHE_TTL_MS = 60_000;
+
 export async function generatePredictions(
   prices: MetalPrice[],
   news: NewsArticle[]
 ): Promise<PricePrediction[]> {
+  const cacheKey = prices.map(p => `${p.metal}:${p.price_usd}`).join("|");
+  if (predictionCache && predictionCache.key === cacheKey && Date.now() - predictionCache.at < PREDICTION_CACHE_TTL_MS) {
+    return predictionCache.data;
+  }
+
   const enhancedNews = await enhanceNewsWithHF(news);
   
   const metals: Array<"gold" | "silver" | "copper"> = ["gold", "silver", "copper"];
   const now = new Date();
 
-  return metals.map((metal) => {
+  const results = metals.map((metal) => {
     const currentPrice = prices.find((p) => p.metal === metal)?.price_usd || 0;
     
     const metalPrices = prices
@@ -291,4 +299,7 @@ export async function generatePredictions(
       factors,
     };
   });
+
+  predictionCache = { key: cacheKey, data: results, at: Date.now() };
+  return results;
 }
