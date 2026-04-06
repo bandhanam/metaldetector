@@ -16,6 +16,7 @@ const NewsFeed = dynamic(() => import("@/components/NewsFeed"), { ssr: false });
 const SentimentChart = dynamic(() => import("@/components/SentimentChart"), { ssr: false });
 const ComparisonChart = dynamic(() => import("@/components/ComparisonChart"), { ssr: false });
 const AdBanner = dynamic(() => import("@/components/AdBanner"), { ssr: false });
+const InvestmentSuggestions = dynamic(() => import("@/components/InvestmentSuggestions"), { ssr: false });
 
 interface AppState {
   data: DashboardData | null;
@@ -187,6 +188,11 @@ export default function Dashboard() {
                   onClick={() => setSelectedMetal(i)}
                 />
               ))}
+            </div>
+
+            {/* AI Investment Suggestions */}
+            <div className="mb-4 md:mb-6">
+              <InvestmentSuggestions predictions={state.data.predictions} market={selectedMarket} />
             </div>
 
             {/* Tab Navigation */}
