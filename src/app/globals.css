@@ -22,7 +22,7 @@
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
-  font-family: 'Avenir', 'Avenir Next', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Nunito Sans', 'Avenir', 'Avenir Next', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .glass-card {
