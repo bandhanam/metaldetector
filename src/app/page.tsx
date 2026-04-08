@@ -33,6 +33,14 @@ export default function Dashboard() {
   const [selectedMetal, setSelectedMetal] = useState<number>(0);
   const [selectedCountry, setSelectedCountry] = useState<string>("IN");
   const [activeTab, setActiveTab] = useState<"overview" | "markets" | "news">("overview");
+  const [metalTransition, setMetalTransition] = useState(false);
+
+  const handleMetalSelect = useCallback((index: number) => {
+    if (index === selectedMetal) return;
+    setMetalTransition(true);
+    setSelectedMetal(index);
+    setTimeout(() => setMetalTransition(false), 400);
+  }, [selectedMetal]);
 
   const fetchData = useCallback(async () => {
     setState((prev) => ({ ...prev, loading: true, error: null }));
@@ -178,16 +186,31 @@ export default function Dashboard() {
             </div>
 
             {/* Price Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-4 md:mb-6">
-              {state.data.predictions.map((pred, i) => (
-                <CountryPriceCard
-                  key={pred.metal}
-                  prediction={pred}
-                  market={selectedMarket}
-                  isSelected={selectedMetal === i}
-                  onClick={() => setSelectedMetal(i)}
-                />
-              ))}
+            <div className="mb-4 md:mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h2 className="text-base md:text-lg font-bold text-[var(--text-primary)]">
+                    Select a Metal
+                  </h2>
+                  <p className="text-xs text-[var(--text-secondary)]">
+                    Tap a metal to view detailed insights, predictions & analysis below
+                  </p>
+                </div>
+                <span className="text-xs text-[var(--text-secondary)] hidden sm:block">
+                  ↓ Scroll down for full analysis
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+                {state.data.predictions.map((pred, i) => (
+                  <CountryPriceCard
+                    key={pred.metal}
+                    prediction={pred}
+                    market={selectedMarket}
+                    isSelected={selectedMetal === i}
+                    onClick={() => handleMetalSelect(i)}
+                  />
+                ))}
+              </div>
             </div>
 
             {/* AI Investment Suggestions */}
@@ -214,7 +237,7 @@ export default function Dashboard() {
 
             {/* Overview Tab */}
             {activeTab === "overview" && selected && selectedMarket && (
-              <div className="space-y-4 md:space-y-6">
+              <div className={`space-y-4 md:space-y-6 transition-all duration-300 ${metalTransition ? "opacity-40 scale-[0.995]" : "opacity-100 scale-100"}`}>
                 {/* Current Rate + Quick Predictions */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   <CurrentRateCard prediction={selected} market={selectedMarket} />

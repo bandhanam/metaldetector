@@ -15,18 +15,33 @@ const METAL_ICONS: Record<string, string> = {
   copper: "🥉",
 };
 
-const METAL_COLORS: Record<string, { gradient: string; glow: string }> = {
+const METAL_COLORS: Record<string, { gradient: string; glow: string; selectedBg: string; selectedBorder: string; ctaBg: string; ctaText: string; accentBar: string }> = {
   gold: {
     gradient: "from-yellow-400 via-amber-500 to-yellow-600",
-    glow: "shadow-yellow-500/20",
+    glow: "shadow-amber-200",
+    selectedBg: "bg-amber-50",
+    selectedBorder: "border-amber-400",
+    ctaBg: "bg-amber-600 hover:bg-amber-700",
+    ctaText: "text-white",
+    accentBar: "linear-gradient(to right, #FFD700, #B8860B)",
   },
   silver: {
     gradient: "from-gray-300 via-slate-400 to-gray-500",
-    glow: "shadow-gray-400/20",
+    glow: "shadow-gray-200",
+    selectedBg: "bg-slate-50",
+    selectedBorder: "border-slate-400",
+    ctaBg: "bg-slate-600 hover:bg-slate-700",
+    ctaText: "text-white",
+    accentBar: "linear-gradient(to right, #94a3b8, #475569)",
   },
   copper: {
     gradient: "from-orange-400 via-amber-600 to-orange-700",
-    glow: "shadow-orange-500/20",
+    glow: "shadow-orange-200",
+    selectedBg: "bg-orange-50",
+    selectedBorder: "border-orange-400",
+    ctaBg: "bg-orange-600 hover:bg-orange-700",
+    ctaText: "text-white",
+    accentBar: "linear-gradient(to right, #f97316, #8B4513)",
   },
 };
 
@@ -60,12 +75,18 @@ export default function CountryPriceCard({
   return (
     <button
       onClick={onClick}
-      className={`glass-card p-5 md:p-6 text-left w-full transition-all duration-300 ${
+      className={`glass-card p-5 md:p-6 text-left w-full transition-all duration-300 relative overflow-hidden ${
         isSelected
-          ? `ring-2 ring-offset-0 ${prediction.metal === "gold" ? "ring-yellow-500/50" : prediction.metal === "silver" ? "ring-gray-400/50" : "ring-orange-500/50"} ${colors.glow} shadow-lg`
-          : "hover:scale-[1.02]"
+          ? `ring-2 ring-offset-2 ring-offset-white ${colors.selectedBorder} ${colors.selectedBg} ${colors.glow} shadow-lg`
+          : "hover:scale-[1.02] hover:shadow-md"
       }`}
     >
+      {isSelected && (
+        <div className="absolute top-0 left-0 right-0 h-1" 
+          style={{ background: colors.accentBar }}
+        />
+      )}
+
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className="text-2xl">{METAL_ICONS[prediction.metal]}</span>
@@ -97,7 +118,7 @@ export default function CountryPriceCard({
         </p>
       </div>
 
-      <div className="flex items-center justify-between text-xs text-[var(--text-secondary)]">
+      <div className="flex items-center justify-between text-xs text-[var(--text-secondary)] mb-3">
         <div className="flex items-center gap-1.5">
           <div
             className={`pulse-dot ${isPositive ? "bg-emerald-600" : "bg-red-600"}`}
@@ -105,6 +126,16 @@ export default function CountryPriceCard({
           <span>Sentiment: {(prediction.sentimentScore * 100).toFixed(0)}%</span>
         </div>
         <span>Conf: {(prediction.confidence * 100).toFixed(0)}%</span>
+      </div>
+
+      <div
+        className={`w-full text-center py-2 rounded-lg text-xs font-semibold transition-all duration-200 ${
+          isSelected
+            ? `${colors.ctaBg} ${colors.ctaText}`
+            : "bg-gray-100 text-[var(--text-secondary)] hover:bg-gray-200"
+        }`}
+      >
+        {isSelected ? "✓ Viewing Insights" : "View Predictions →"}
       </div>
     </button>
   );
