@@ -106,14 +106,28 @@ export async function getNews(): Promise<NewsArticle[]> {
 
 // ─── STEP 2: One API call → store in DB → return ───
 export async function fetchAndStoreNews(): Promise<NewsArticle[]> {
-  const q = '("gold price" OR "silver price" OR "copper price" OR "precious metals" OR "commodity market") AND (economy OR market OR trade OR finance OR investment OR mining OR inflation OR "central bank" OR "interest rate" OR GDP OR forex OR currency OR tariff OR export OR import OR manufacturing OR demand OR supply)';
+  // More specific query focused on commodity trading and economics
+  const q = '("gold price" OR "gold prices" OR "silver price" OR "silver prices" OR "copper price" OR "copper prices" OR "precious metals" OR "commodity trading" OR "bullion" OR "metal markets") AND (trading OR investor OR commodity OR futures OR mcx OR comex OR lbma OR forex OR inflation OR "federal reserve" OR "central bank" OR mining OR rally OR decline OR forecast)';
 
-  // Exclude sports, entertainment, and irrelevant content
+  // Comprehensive exclusion list - anything NOT related to metal commodity trading
   const EXCLUDE_KEYWORDS = [
-    "sport", "football", "soccer", "basketball", "cricket", "tennis", "olympics",
-    "movie", "film", "celebrity", "actor", "actress", "music", "concert", "album",
-    "game", "gaming", "esports", "tournament", "championship", "playoff", "season",
-    "fashion", "style", "beauty", "makeup", "jewelry design", "watch collection"
+    // Sports & Games
+    "sport", "football", "soccer", "basketball", "cricket", "tennis", "olympics", "olympic", 
+    "tournament", "championship", "playoff", "season", "athlete", "medal", "trophy",
+    // Entertainment & Media
+    "movie", "film", "celebrity", "actor", "actress", "music", "concert", "album", "netflix",
+    "gaming", "esports", "video game", "playstation", "xbox",
+    // Fashion & Lifestyle  
+    "fashion", "style", "beauty", "makeup", "jewelry design", "watch collection", "necklace", "bracelet",
+    // Science & Space (THIS IS THE KEY FIX)
+    "nasa", "space", "rocket", "satellite", "astronaut", "mission", "apollo", "artemis", 
+    "mars", "moon landing", "spacecraft", "orbit", "launch", "galaxy", "asteroid",
+    // Technology Products
+    "iphone", "samsung", "smartphone", "laptop", "gadget", "app store", "google play",
+    // Health & Medical
+    "covid", "vaccine", "hospital", "patient", "clinical trial", "drug approval",
+    // Real Estate & Property
+    "real estate", "property sale", "housing market", "apartment", "mortgage rate"
   ];
 
   let articles: NewsArticle[] = [];
@@ -139,29 +153,52 @@ export async function fetchAndStoreNews(): Promise<NewsArticle[]> {
         const fullText = `${title} ${a.description || ""}`;
         const lowerText = fullText.toLowerCase();
         
-        // Skip if contains excluded keywords
+        // FIRST: Skip if contains excluded keywords (space missions, sports, etc.)
         if (EXCLUDE_KEYWORDS.some(keyword => lowerText.includes(keyword))) {
           continue;
         }
 
-        // Only include if has economic/financial relevance
-        const hasFinancialRelevance = 
-          lowerText.includes("price") || 
-          lowerText.includes("market") || 
-          lowerText.includes("trade") || 
-          lowerText.includes("economy") || 
+        // SECOND: Must explicitly mention metal commodity terms
+        const hasCommodityMention = 
+          lowerText.includes("gold price") || 
+          lowerText.includes("gold prices") ||
+          lowerText.includes("silver price") || 
+          lowerText.includes("silver prices") ||
+          lowerText.includes("copper price") || 
+          lowerText.includes("copper prices") ||
+          lowerText.includes("precious metal") ||
+          lowerText.includes("bullion") ||
+          lowerText.includes("commodity market") ||
+          lowerText.includes("commodity trading") ||
+          lowerText.includes("metal market") ||
+          lowerText.includes("mcx") ||
+          lowerText.includes("comex") ||
+          lowerText.includes("lbma");
+
+        // THIRD: Must have economic/trading context
+        const hasTradingContext = 
+          lowerText.includes("trading") || 
+          lowerText.includes("trader") || 
+          lowerText.includes("investor") || 
+          lowerText.includes("investment") ||
+          lowerText.includes("futures") ||
+          lowerText.includes("spot price") ||
+          lowerText.includes("rally") ||
+          lowerText.includes("decline") ||
+          lowerText.includes("forecast") ||
+          lowerText.includes("outlook") ||
           lowerText.includes("inflation") || 
           lowerText.includes("central bank") ||
           lowerText.includes("interest rate") ||
+          lowerText.includes("federal reserve") ||
           lowerText.includes("forex") ||
-          lowerText.includes("commodity") ||
-          lowerText.includes("mining") ||
+          lowerText.includes("dollar") ||
+          lowerText.includes("mining sector") ||
           lowerText.includes("demand") ||
-          lowerText.includes("supply") ||
-          lowerText.includes("export") ||
-          lowerText.includes("import");
+          lowerText.includes("supply");
 
-        if (!hasFinancialRelevance) continue;
+        // Article MUST have both commodity mention AND trading context
+        if (!hasCommodityMention || !hasTradingContext) continue;
 
         articles.push({
           title,
