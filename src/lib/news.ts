@@ -106,7 +106,15 @@ export async function getNews(): Promise<NewsArticle[]> {
 
 // ─── STEP 2: One API call → store in DB → return ───
 export async function fetchAndStoreNews(): Promise<NewsArticle[]> {
-  const q = 'gold OR silver OR copper OR inflation OR "interest rate" OR war OR tariff OR GDP OR "central bank" OR recession OR geopolitical OR sanctions';
+  const q = '("gold price" OR "silver price" OR "copper price" OR "precious metals" OR "commodity market") AND (economy OR market OR trade OR finance OR investment OR mining OR inflation OR "central bank" OR "interest rate" OR GDP OR forex OR currency OR tariff OR export OR import OR manufacturing OR demand OR supply)';
+
+  // Exclude sports, entertainment, and irrelevant content
+  const EXCLUDE_KEYWORDS = [
+    "sport", "football", "soccer", "basketball", "cricket", "tennis", "olympics",
+    "movie", "film", "celebrity", "actor", "actress", "music", "concert", "album",
+    "game", "gaming", "esports", "tournament", "championship", "playoff", "season",
+    "fashion", "style", "beauty", "makeup", "jewelry design", "watch collection"
+  ];
 
   let articles: NewsArticle[] = [];
 
@@ -114,7 +122,7 @@ export async function fetchAndStoreNews(): Promise<NewsArticle[]> {
     if (typeof process !== "undefined") {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     }
-    const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(q)}&language=en&sortBy=publishedAt&pageSize=100&apiKey=${NEWS_API_KEY}`;
+    const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(q)}&language=en&sortBy=publishedAt&pageSize=100&apiKey=${NEWS_API_KEY}&domains=reuters.com,bloomberg.com,wsj.com,ft.com,cnbc.com,marketwatch.com,investing.com,moneycontrol.com,business-standard.com,economictimes.indiatimes.com,thehindubusinessline.com`;
     const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
 
     if (res.ok) {
@@ -129,6 +137,32 @@ export async function fetchAndStoreNews(): Promise<NewsArticle[]> {
         seen.add(articleUrl);
 
         const fullText = `${title} ${a.description || ""}`;
+        const lowerText = fullText.toLowerCase();
+        
+        // Skip if contains excluded keywords
+        if (EXCLUDE_KEYWORDS.some(keyword => lowerText.includes(keyword))) {
+          continue;
+        }
+
+        // Only include if has economic/financial relevance
+        const hasFinancialRelevance = 
+          lowerText.includes("price") || 
+          lowerText.includes("market") || 
+          lowerText.includes("trade") || 
+          lowerText.includes("economy") || 
+          lowerText.includes("inflation") || 
+          lowerText.includes("central bank") ||
+          lowerText.includes("interest rate") ||
+          lowerText.includes("forex") ||
+          lowerText.includes("commodity") ||
+          lowerText.includes("mining") ||
+          lowerText.includes("demand") ||
+          lowerText.includes("supply") ||
+          lowerText.includes("export") ||
+          lowerText.includes("import");
+
+        if (!hasFinancialRelevance) continue;
+
         articles.push({
           title,
           description: a.description || "",
