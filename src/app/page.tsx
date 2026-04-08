@@ -185,6 +185,11 @@ export default function Dashboard() {
               />
             </div>
 
+            {/* AI Investment Suggestions */}
+            <div className="mb-4 md:mb-6">
+              <InvestmentSuggestions predictions={state.data.predictions} market={selectedMarket} />
+            </div>
+
             {/* Price Cards */}
             <div className="mb-4 md:mb-6">
               <div className="flex items-center justify-between mb-3">
@@ -211,11 +216,6 @@ export default function Dashboard() {
                   />
                 ))}
               </div>
-            </div>
-
-            {/* AI Investment Suggestions */}
-            <div className="mb-4 md:mb-6">
-              <InvestmentSuggestions predictions={state.data.predictions} market={selectedMarket} />
             </div>
 
             {/* Tab Navigation */}
