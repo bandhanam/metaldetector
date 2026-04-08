@@ -1,41 +1,42 @@
 @import "tailwindcss";
 
 :root {
-  --gold: #FFD700;
-  --gold-dark: #B8860B;
-  --silver: #C0C0C0;
-  --silver-dark: #808080;
-  --copper: #B87333;
-  --copper-dark: #8B4513;
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #12121a;
-  --bg-card: #1a1a2e;
-  --bg-card-hover: #1f1f35;
-  --text-primary: #e8e8f0;
-  --text-secondary: #9898b0;
-  --accent-green: #00e676;
-  --accent-red: #ff5252;
-  --accent-blue: #448aff;
-  --border: #2a2a40;
+  --gold: #B8860B;
+  --gold-dark: #8B6914;
+  --silver: #808080;
+  --silver-dark: #606060;
+  --copper: #8B4513;
+  --copper-dark: #6B3410;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f5f6f7;
+  --text-primary: #1a1a2e;
+  --text-secondary: #2c3e50;
+  --accent-green: #00a152;
+  --accent-red: #d32f2f;
+  --accent-blue: #1976d2;
+  --border: #dce1e8;
 }
 
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Avenir', 'Avenir Next', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .glass-card {
-  background: linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(18, 18, 26, 0.9));
+  background: var(--bg-card);
   backdrop-filter: blur(20px);
   border: 1px solid var(--border);
   border-radius: 16px;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .glass-card:hover {
-  border-color: rgba(255, 215, 0, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-color: rgba(184, 134, 11, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 .metal-gold { --metal-color: var(--gold); --metal-dark: var(--gold-dark); }
@@ -51,7 +52,7 @@ body {
 }
 
 .shimmer {
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.03), transparent);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
@@ -74,7 +75,7 @@ body {
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #FFD700, #FFA500, #B87333);
+  background: linear-gradient(135deg, #B8860B, #8B6914, #8B4513);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -87,7 +88,7 @@ body {
   background: transparent;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: #c0c4cc;
   border-radius: 2px;
 }
 
