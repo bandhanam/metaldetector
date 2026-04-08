@@ -78,8 +78,8 @@ export default function CountryPriceCard({
         <div
           className={`flex items-center gap-1 text-sm font-semibold px-2.5 py-1 rounded-full ${
             isPositive
-              ? "bg-emerald-500/15 text-emerald-400"
-              : "bg-red-500/15 text-red-400"
+              ? "bg-emerald-50 text-emerald-700"
+              : "bg-red-50 text-red-700"
           }`}
         >
           <span>{isPositive ? "▲" : "▼"}</span>
@@ -100,7 +100,7 @@ export default function CountryPriceCard({
       <div className="flex items-center justify-between text-xs text-[var(--text-secondary)]">
         <div className="flex items-center gap-1.5">
           <div
-            className={`pulse-dot ${isPositive ? "bg-emerald-400" : "bg-red-400"}`}
+            className={`pulse-dot ${isPositive ? "bg-emerald-600" : "bg-red-600"}`}
           />
           <span>Sentiment: {(prediction.sentimentScore * 100).toFixed(0)}%</span>
         </div>

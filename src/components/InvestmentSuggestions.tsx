@@ -135,42 +135,42 @@ function analyzeMetal(pred: PricePrediction): SuggestionData {
 
 const SIGNAL_STYLES: Record<string, { border: string; bg: string; badge: string; badgeText: string; icon: string; label: string }> = {
   strong_buy: {
-    border: "border-emerald-500/30",
-    bg: "from-emerald-500/10 via-emerald-500/5 to-transparent",
-    badge: "bg-emerald-500/20",
-    badgeText: "text-emerald-400",
+    border: "border-emerald-300",
+    bg: "from-emerald-50 via-emerald-50/50 to-transparent",
+    badge: "bg-emerald-100",
+    badgeText: "text-emerald-700",
     icon: "🚀",
     label: "STRONG BUY",
   },
   buy: {
-    border: "border-green-500/25",
-    bg: "from-green-500/8 via-green-500/3 to-transparent",
-    badge: "bg-green-500/20",
-    badgeText: "text-green-400",
+    border: "border-green-300",
+    bg: "from-green-50 via-green-50/50 to-transparent",
+    badge: "bg-green-100",
+    badgeText: "text-green-700",
     icon: "📈",
     label: "BUY",
   },
   hold: {
-    border: "border-amber-500/25",
-    bg: "from-amber-500/8 via-amber-500/3 to-transparent",
-    badge: "bg-amber-500/20",
-    badgeText: "text-amber-400",
+    border: "border-amber-300",
+    bg: "from-amber-50 via-amber-50/50 to-transparent",
+    badge: "bg-amber-100",
+    badgeText: "text-amber-700",
     icon: "⏸️",
     label: "HOLD",
   },
   sell: {
-    border: "border-orange-500/25",
-    bg: "from-orange-500/8 via-orange-500/3 to-transparent",
-    badge: "bg-orange-500/20",
-    badgeText: "text-orange-400",
+    border: "border-orange-300",
+    bg: "from-orange-50 via-orange-50/50 to-transparent",
+    badge: "bg-orange-100",
+    badgeText: "text-orange-700",
     icon: "⚠️",
     label: "PAUSE",
   },
   strong_sell: {
-    border: "border-red-500/25",
-    bg: "from-red-500/8 via-red-500/3 to-transparent",
-    badge: "bg-red-500/20",
-    badgeText: "text-red-400",
+    border: "border-red-300",
+    bg: "from-red-50 via-red-50/50 to-transparent",
+    badge: "bg-red-100",
+    badgeText: "text-red-700",
     icon: "🛑",
     label: "AVOID",
   },
@@ -182,13 +182,13 @@ function TrendBar({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex items-center gap-2">
       <span className="text-[10px] text-[var(--text-secondary)] w-16 shrink-0">{label}</span>
-      <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden relative">
+      <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden relative">
         <div
-          className={`h-full rounded-full transition-all duration-700 ${isPositive ? "bg-emerald-500" : "bg-red-500"}`}
+          className={`h-full rounded-full transition-all duration-700 ${isPositive ? "bg-emerald-600" : "bg-red-600"}`}
           style={{ width: `${width}%` }}
         />
       </div>
-      <span className={`text-xs font-bold w-14 text-right ${isPositive ? "text-emerald-400" : "text-red-400"}`}>
+      <span className={`text-xs font-bold w-14 text-right ${isPositive ? "text-emerald-700" : "text-red-700"}`}>
         {isPositive ? "+" : ""}{value.toFixed(2)}%
       </span>
     </div>
@@ -253,29 +253,29 @@ export default function InvestmentSuggestions({ predictions, market }: Investmen
 
               {/* Confidence + Sentiment */}
               <div className="flex gap-2 mb-4">
-                <div className="flex-1 bg-white/5 rounded-lg p-2 text-center">
+                <div className="flex-1 bg-gray-50 rounded-lg p-2 text-center">
                   <p className="text-[9px] text-[var(--text-secondary)] uppercase tracking-wider mb-0.5">Confidence</p>
                   <p className="text-sm font-bold">{(s.confidence * 100).toFixed(0)}%</p>
                 </div>
-                <div className="flex-1 bg-white/5 rounded-lg p-2 text-center">
+                <div className="flex-1 bg-gray-50 rounded-lg p-2 text-center">
                   <p className="text-[9px] text-[var(--text-secondary)] uppercase tracking-wider mb-0.5">Sentiment</p>
-                  <p className={`text-sm font-bold ${s.sentiment >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                  <p className={`text-sm font-bold ${s.sentiment >= 0 ? "text-emerald-700" : "text-red-700"}`}>
                     {s.sentiment >= 0 ? "+" : ""}{(s.sentiment * 100).toFixed(0)}%
                   </p>
                 </div>
-                <div className="flex-1 bg-white/5 rounded-lg p-2 text-center">
+                <div className="flex-1 bg-gray-50 rounded-lg p-2 text-center">
                   <p className="text-[9px] text-[var(--text-secondary)] uppercase tracking-wider mb-0.5">Factors</p>
                   <p className="text-sm font-bold">
-                    <span className="text-emerald-400">{s.bullishFactors}</span>
+                    <span className="text-emerald-700">{s.bullishFactors}</span>
                     <span className="text-[var(--text-secondary)] mx-0.5">/</span>
-                    <span className="text-red-400">{s.bearishFactors}</span>
+                    <span className="text-red-700">{s.bearishFactors}</span>
                   </p>
                 </div>
               </div>
 
               {/* Action tip */}
-              <div className={`rounded-xl ${style.badge} p-3 border border-white/5`}>
-                <p className="text-xs leading-relaxed">
+              <div className={`rounded-xl ${style.badge} p-3 border border-gray-200`}>
+                <p className="text-xs leading-relaxed text-[var(--text-primary)]">
                   <span className="font-bold">What to do: </span>
                   {s.actionTip}
                 </p>
@@ -285,7 +285,7 @@ export default function InvestmentSuggestions({ predictions, market }: Investmen
         })}
       </div>
 
-      <div className="mt-4 p-3 rounded-lg bg-white/[0.02] border border-white/5">
+      <div className="mt-4 p-3 rounded-lg bg-gray-50 border border-gray-200">
         <p className="text-[10px] text-[var(--text-secondary)] text-center leading-relaxed">
           ⚠️ These suggestions are AI-generated based on market analysis and are <strong>not financial advice</strong>. 
           Always consult a qualified financial advisor before making investment decisions. Past performance does not guarantee future results.

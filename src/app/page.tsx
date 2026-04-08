@@ -97,8 +97,8 @@ export default function Dashboard() {
               {state.data?.lastUpdated && (
                 <div className="hidden md:flex flex-col items-end text-[10px] text-[var(--text-secondary)]">
                   <span>Updated: {new Date(state.data.lastUpdated).toLocaleTimeString()}</span>
-                  <span className="text-green-400 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                  <span className="text-[var(--accent-green)] flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-green)] animate-pulse" />
                     Live prices
                   </span>
                 </div>
@@ -106,11 +106,11 @@ export default function Dashboard() {
               <button
                 onClick={fetchData}
                 disabled={state.loading}
-                className="px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm font-medium rounded-xl bg-white/5 hover:bg-white/10 border border-[var(--border)] transition-all disabled:opacity-50"
+                className="px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm font-medium rounded-xl bg-gray-100 hover:bg-gray-200 border border-[var(--border)] transition-all disabled:opacity-50 text-[var(--text-primary)]"
               >
                 {state.loading ? (
                   <span className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span className="w-3 h-3 border-2 border-gray-400 border-t-gray-700 rounded-full animate-spin" />
                     Loading
                   </span>
                 ) : (
@@ -123,12 +123,12 @@ export default function Dashboard() {
       </header>
 
       {/* AI Hero Banner */}
-      <div className="bg-gradient-to-r from-amber-500/10 via-yellow-500/5 to-orange-500/10 border-b border-amber-500/10">
+      <div className="bg-gradient-to-r from-amber-50 via-yellow-50 to-orange-50 border-b border-amber-200">
         <div className="max-w-7xl mx-auto px-4 py-3 md:py-4">
           <div className="flex items-start gap-3">
             <span className="text-2xl mt-0.5">🤖</span>
             <div>
-              <p className="text-sm md:text-base font-semibold text-amber-300">
+              <p className="text-sm md:text-base font-semibold text-amber-700">
                 AI-Powered Intelligent Forecast System
               </p>
               <p className="text-[11px] md:text-xs text-[var(--text-secondary)] mt-0.5 leading-relaxed max-w-3xl">
@@ -196,15 +196,15 @@ export default function Dashboard() {
             </div>
 
             {/* Tab Navigation */}
-            <div className="flex gap-1 mb-4 md:mb-6 p-1 bg-white/5 rounded-xl w-fit">
+            <div className="flex gap-1 mb-4 md:mb-6 p-1 bg-gray-100 rounded-xl w-fit">
               {(["overview", "markets", "news"] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`px-4 py-2 text-sm font-medium rounded-lg transition-all capitalize ${
                     activeTab === tab
-                      ? "bg-white/10 text-white"
-                      : "text-[var(--text-secondary)] hover:text-white"
+                      ? "bg-white text-[var(--text-primary)] shadow-sm"
+                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-gray-50"
                   }`}
                 >
                   {tab}
@@ -275,16 +275,16 @@ export default function Dashboard() {
 
       {/* Disclaimer */}
       <div className="max-w-7xl mx-auto px-4 mt-8 md:mt-10">
-        <div className="rounded-xl border border-amber-500/15 bg-amber-500/5 p-4 md:p-5">
+        <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 md:p-5">
           <div className="flex items-start gap-3">
             <span className="text-lg mt-0.5">⚠️</span>
             <div>
-              <p className="text-sm font-semibold text-amber-300 mb-1.5">Important Disclaimer</p>
+              <p className="text-sm font-semibold text-amber-800 mb-1.5">Important Disclaimer</p>
               <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                 This is an AI-powered forecast system. Predictions are generated using machine learning models, 
                 news sentiment analysis, and historical patterns. Metal prices can change suddenly due to 
                 unexpected global events — wars, policy shifts, natural disasters, or market crashes — which 
-                no model can fully anticipate. <span className="text-amber-400/90 font-medium">Use your own wisdom, 
+                no model can fully anticipate. <span className="text-amber-700 font-medium">Use your own wisdom, 
                 research, and financial judgment before making any investment or purchase decisions in metals.</span> 
                 This tool is for informational purposes only and does not constitute financial advice.
               </p>
@@ -304,11 +304,11 @@ export default function Dashboard() {
           </p>
         </div>
         <div className="flex items-center justify-center gap-4 mt-3 text-xs text-[var(--text-secondary)]">
-          <a href="/privacy" className="hover:text-amber-400 transition-colors">Privacy Policy</a>
+          <a href="/privacy" className="hover:text-amber-700 transition-colors">Privacy Policy</a>
           <span>·</span>
-          <a href="/terms" className="hover:text-amber-400 transition-colors">Terms of Service</a>
+          <a href="/terms" className="hover:text-amber-700 transition-colors">Terms of Service</a>
           <span>·</span>
-          <a href="/about" className="hover:text-amber-400 transition-colors">About</a>
+          <a href="/about" className="hover:text-amber-700 transition-colors">About</a>
         </div>
       </footer>
     </div>

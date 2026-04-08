@@ -17,16 +17,16 @@ export default function NewsFeed({ articles }: NewsFeedProps) {
         {articles.slice(0, 100).map((article, i) => {
           const sentimentColor =
             article.sentiment > 0.05
-              ? "text-emerald-400"
+              ? "text-emerald-700"
               : article.sentiment < -0.05
-                ? "text-red-400"
-                : "text-blue-400";
+                ? "text-red-700"
+                : "text-blue-700";
           const sentimentDot =
             article.sentiment > 0.05
-              ? "bg-emerald-400"
+              ? "bg-emerald-600"
               : article.sentiment < -0.05
-                ? "bg-red-400"
-                : "bg-blue-400";
+                ? "bg-red-600"
+                : "bg-blue-600";
 
           return (
             <a
@@ -34,10 +34,10 @@ export default function NewsFeed({ articles }: NewsFeedProps) {
               href={article.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/[0.04] transition-all group"
+              className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-gray-50 transition-all group"
             >
               <span className={`${sentimentDot} w-1.5 h-1.5 rounded-full shrink-0`} />
-              <span className="text-sm leading-tight truncate flex-1 group-hover:text-white transition-colors">
+              <span className="text-sm leading-tight truncate flex-1 group-hover:text-[var(--text-primary)] transition-colors">
                 {article.title}
               </span>
               <span className={`${sentimentColor} text-[10px] font-mono shrink-0`}>
