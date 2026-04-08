@@ -11,7 +11,7 @@ export default function PrivacyPolicy() {
     <div className="min-h-screen">
       <header className="border-b border-[var(--border)]">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-3">
-          <Link href="/" className="text-amber-400 hover:text-amber-300 text-sm">&larr; Back to Dashboard</Link>
+          <Link href="/" className="text-amber-700 hover:text-amber-800 text-sm">&larr; Back to Dashboard</Link>
         </div>
       </header>
 
@@ -31,14 +31,14 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">2. Use of Cookies</h2>
-            <p>We use cookies through Google AdSense to serve ads. Google uses cookies to serve ads based on your prior visits to this website or other websites. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">Google Ads Settings</a>.</p>
+            <p>We use cookies through Google AdSense to serve ads. Google uses cookies to serve ads based on your prior visits to this website or other websites. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-amber-700 hover:underline">Google Ads Settings</a>.</p>
           </section>
 
           <section>
             <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">3. Third-Party Services</h2>
             <p>We use the following third-party services:</p>
             <ul className="list-disc ml-6 mt-2 space-y-1">
-              <li><strong>Google AdSense</strong> for advertising. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">Google Privacy Policy</a></li>
+              <li><strong>Google AdSense</strong> for advertising. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-amber-700 hover:underline">Google Privacy Policy</a></li>
               <li><strong>MetalMetric API</strong> for live metal spot prices.</li>
               <li><strong>ExchangeRate API</strong> for live currency exchange rates.</li>
               <li><strong>NewsAPI</strong> for financial news data.</li>
@@ -52,7 +52,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">5. Your Rights</h2>
-            <p>You may disable cookies in your browser settings at any time. You can opt out of Google&apos;s use of cookies for ad personalization at <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">adssettings.google.com</a>.</p>
+            <p>You may disable cookies in your browser settings at any time. You can opt out of Google&apos;s use of cookies for ad personalization at <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-amber-700 hover:underline">adssettings.google.com</a>.</p>
           </section>
 
           <section>
@@ -67,7 +67,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">8. Contact</h2>
-            <p>If you have questions about this Privacy Policy, please contact us through our <Link href="/about" className="text-amber-400 hover:underline">About page</Link>.</p>
+            <p>If you have questions about this Privacy Policy, please contact us through our <Link href="/about" className="text-amber-700 hover:underline">About page</Link>.</p>
           </section>
         </div>
       </main>

@@ -113,26 +113,26 @@ export default function PredictionChart({ prediction, market }: PredictionChartP
               <stop offset="95%" stopColor={colors.main} stopOpacity={0.02} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.08)" />
           <XAxis
             dataKey="name"
-            stroke="rgba(255,255,255,0.3)"
-            tick={{ fill: "rgba(255,255,255,0.5)", fontSize: 11 }}
-            axisLine={{ stroke: "rgba(255,255,255,0.1)" }}
+            stroke="rgba(0,0,0,0.2)"
+            tick={{ fill: "#2c3e50", fontSize: 11 }}
+            axisLine={{ stroke: "rgba(0,0,0,0.1)" }}
           />
           <YAxis
             domain={[minVal - padding, maxVal + padding]}
-            stroke="rgba(255,255,255,0.3)"
-            tick={{ fill: "rgba(255,255,255,0.5)", fontSize: 11 }}
-            axisLine={{ stroke: "rgba(255,255,255,0.1)" }}
+            stroke="rgba(0,0,0,0.2)"
+            tick={{ fill: "#2c3e50", fontSize: 11 }}
+            axisLine={{ stroke: "rgba(0,0,0,0.1)" }}
             tickFormatter={formatValue}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: "rgba(26, 26, 46, 0.95)",
-              border: "1px solid rgba(255,255,255,0.1)",
+              backgroundColor: "#ffffff",
+              border: "1px solid #dce1e8",
               borderRadius: "12px",
-              color: "#e8e8f0",
+              color: "#1a1a2e",
               fontSize: "13px",
             }}
             formatter={(value, name) => [
@@ -142,11 +142,11 @@ export default function PredictionChart({ prediction, market }: PredictionChartP
           />
           <ReferenceLine
             y={localPrice}
-            stroke="rgba(255,255,255,0.2)"
+            stroke="rgba(0,0,0,0.2)"
             strokeDasharray="5 5"
             label={{
               value: "Current",
-              fill: "rgba(255,255,255,0.4)",
+              fill: "#2c3e50",
               fontSize: 10,
             }}
           />

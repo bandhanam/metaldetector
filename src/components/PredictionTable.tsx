@@ -63,7 +63,7 @@ export default function PredictionTable({ prediction, market }: PredictionTableP
             return (
               <tr
                 key={p.label}
-                className="border-b border-[var(--border)]/50 hover:bg-white/[0.02] transition-colors"
+                className="border-b border-[var(--border)]/50 hover:bg-gray-50 transition-colors"
               >
                 <td className="py-3 px-2">
                   <div>
@@ -85,7 +85,7 @@ export default function PredictionTable({ prediction, market }: PredictionTableP
                 <td className="text-right py-3 px-2">
                   <span
                     className={`inline-flex items-center gap-0.5 font-semibold ${
-                      isPositive ? "text-emerald-400" : "text-red-400"
+                      isPositive ? "text-emerald-700" : "text-red-700"
                     }`}
                   >
                     {isPositive ? "▲" : "▼"} {Math.abs(p.changePercent).toFixed(2)}%

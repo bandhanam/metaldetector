@@ -8,9 +8,9 @@ interface FactorsPanelProps {
 }
 
 const IMPACT_STYLES: Record<string, { bg: string; text: string; icon: string }> = {
-  bullish: { bg: "bg-emerald-500/10", text: "text-emerald-400", icon: "↑" },
-  bearish: { bg: "bg-red-500/10", text: "text-red-400", icon: "↓" },
-  neutral: { bg: "bg-blue-500/10", text: "text-blue-400", icon: "→" },
+  bullish: { bg: "bg-emerald-50", text: "text-emerald-700", icon: "↑" },
+  bearish: { bg: "bg-red-50", text: "text-red-700", icon: "↓" },
+  neutral: { bg: "bg-blue-50", text: "text-blue-700", icon: "→" },
 };
 
 export default function FactorsPanel({ factors, metal }: FactorsPanelProps) {
@@ -25,7 +25,7 @@ export default function FactorsPanel({ factors, metal }: FactorsPanelProps) {
           return (
             <div
               key={i}
-              className={`${style.bg} rounded-xl p-3.5 border border-white/5`}
+              className={`${style.bg} rounded-xl p-3.5 border border-gray-200`}
             >
               <div className="flex items-center justify-between mb-1.5">
                 <span className="font-semibold text-sm">{factor.name}</span>
@@ -38,7 +38,7 @@ export default function FactorsPanel({ factors, metal }: FactorsPanelProps) {
               <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                 {factor.description}
               </p>
-              <div className="mt-2 h-1.5 bg-white/5 rounded-full overflow-hidden">
+              <div className="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all duration-500 ${
                     factor.impact === "bullish"

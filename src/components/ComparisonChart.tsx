@@ -37,23 +37,23 @@ export default function ComparisonChart({ predictions }: ComparisonChartProps) {
       </h3>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.08)" />
           <XAxis
             dataKey="name"
-            stroke="rgba(255,255,255,0.3)"
-            tick={{ fill: "rgba(255,255,255,0.5)", fontSize: 11 }}
+            stroke="rgba(0,0,0,0.2)"
+            tick={{ fill: "#2c3e50", fontSize: 11 }}
           />
           <YAxis
-            stroke="rgba(255,255,255,0.3)"
-            tick={{ fill: "rgba(255,255,255,0.5)", fontSize: 11 }}
+            stroke="rgba(0,0,0,0.2)"
+            tick={{ fill: "#2c3e50", fontSize: 11 }}
             tickFormatter={(v) => `${v}%`}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: "rgba(26, 26, 46, 0.95)",
-              border: "1px solid rgba(255,255,255,0.1)",
+              backgroundColor: "#ffffff",
+              border: "1px solid #dce1e8",
               borderRadius: "12px",
-              color: "#e8e8f0",
+              color: "#1a1a2e",
             }}
             formatter={(value, name) => [
               `${Number(value).toFixed(2)}%`,
@@ -61,7 +61,7 @@ export default function ComparisonChart({ predictions }: ComparisonChartProps) {
             ]}
           />
           <Legend
-            wrapperStyle={{ color: "rgba(255,255,255,0.6)", fontSize: "12px" }}
+            wrapperStyle={{ color: "#2c3e50", fontSize: "12px" }}
           />
           <Line
             type="monotone"

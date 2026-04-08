@@ -11,7 +11,7 @@ export default function Terms() {
     <div className="min-h-screen">
       <header className="border-b border-[var(--border)]">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-3">
-          <Link href="/" className="text-amber-400 hover:text-amber-300 text-sm">&larr; Back to Dashboard</Link>
+          <Link href="/" className="text-amber-700 hover:text-amber-800 text-sm">&larr; Back to Dashboard</Link>
         </div>
       </header>
 
@@ -32,7 +32,7 @@ export default function Terms() {
 
           <section>
             <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">3. Not Financial Advice</h2>
-            <p className="text-amber-400/90 font-medium">The information provided by Metal Detector does NOT constitute financial, investment, or trading advice. Predictions are algorithmic forecasts and may be inaccurate. You should consult a qualified financial advisor before making any investment decisions. We are not responsible for any financial losses resulting from decisions made based on information provided by this Service.</p>
+            <p className="text-amber-700 font-medium">The information provided by Metal Detector does NOT constitute financial, investment, or trading advice. Predictions are algorithmic forecasts and may be inaccurate. You should consult a qualified financial advisor before making any investment decisions. We are not responsible for any financial losses resulting from decisions made based on information provided by this Service.</p>
           </section>
 
           <section>
@@ -67,7 +67,7 @@ export default function Terms() {
 
           <section>
             <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">10. Contact</h2>
-            <p>For questions about these Terms, please visit our <Link href="/about" className="text-amber-400 hover:underline">About page</Link>.</p>
+            <p>For questions about these Terms, please visit our <Link href="/about" className="text-amber-700 hover:underline">About page</Link>.</p>
           </section>
         </div>
       </main>

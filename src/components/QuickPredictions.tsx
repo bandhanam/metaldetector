@@ -58,7 +58,7 @@ export default function QuickPredictions({
 
       <div className="space-y-4">
         {/* Current Rate */}
-        <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+        <div className="bg-gray-50 rounded-xl p-4 border border-[var(--border)]">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs text-[var(--text-secondary)] mb-1">
@@ -88,7 +88,7 @@ export default function QuickPredictions({
           return (
             <div
               key={label}
-              className="bg-white/[0.02] rounded-xl p-4 border border-white/5 hover:border-white/10 transition-all"
+              className="bg-[var(--bg-secondary)] rounded-xl p-4 border border-[var(--border)] hover:border-amber-400 transition-all"
             >
               <div className="flex items-start justify-between mb-3">
                 <div>
@@ -100,8 +100,8 @@ export default function QuickPredictions({
                 <div
                   className={`flex items-center gap-1 text-sm font-bold px-3 py-1.5 rounded-full ${
                     isPositive
-                      ? "bg-emerald-500/15 text-emerald-400"
-                      : "bg-red-500/15 text-red-400"
+                      ? "bg-emerald-50 text-emerald-700"
+                      : "bg-red-50 text-red-700"
                   }`}
                 >
                   <span>{isPositive ? "▲" : "▼"}</span>
@@ -133,8 +133,8 @@ export default function QuickPredictions({
         })}
       </div>
 
-      <div className="mt-4 p-3 bg-blue-500/5 rounded-lg border border-blue-500/20">
-        <p className="text-xs text-blue-400 leading-relaxed">
+      <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+        <p className="text-xs text-blue-700 leading-relaxed">
           💡 Predictions based on {prediction.factors.length} factors including news
           sentiment, inflation, and central bank policy. Confidence:{" "}
           {(prediction.confidence * 100).toFixed(0)}%

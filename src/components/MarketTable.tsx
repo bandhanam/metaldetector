@@ -23,13 +23,13 @@ export default function MarketTable({ markets }: MarketTableProps) {
           <tr className="text-[var(--text-secondary)] border-b border-[var(--border)]">
             <th className="text-left py-2 px-2 font-medium">Market</th>
             <th className="text-right py-2 px-2 font-medium">
-              <span className="text-yellow-400">Gold</span>
+              <span className="text-amber-700">Gold</span>
             </th>
             <th className="text-right py-2 px-2 font-medium">
-              <span className="text-gray-300">Silver</span>
+              <span className="text-gray-600">Silver</span>
             </th>
             <th className="text-right py-2 px-2 font-medium hidden md:table-cell">
-              <span className="text-orange-400">Copper</span>
+              <span className="text-orange-700">Copper</span>
             </th>
             <th className="text-right py-2 px-2 font-medium hidden lg:table-cell">GDP</th>
             <th className="text-right py-2 px-2 font-medium hidden lg:table-cell">CPI</th>
@@ -40,7 +40,7 @@ export default function MarketTable({ markets }: MarketTableProps) {
           {markets.map((m) => (
             <tr
               key={m.countryCode}
-              className="border-b border-[var(--border)]/50 hover:bg-white/[0.02] transition-colors"
+              className="border-b border-[var(--border)]/50 hover:bg-gray-50 transition-colors"
             >
               <td className="py-3 px-2">
                 <div className="flex items-center gap-2">
@@ -53,15 +53,15 @@ export default function MarketTable({ markets }: MarketTableProps) {
                   </div>
                 </div>
               </td>
-              <td className="text-right py-3 px-2 font-semibold text-yellow-400">
+              <td className="text-right py-3 px-2 font-semibold text-amber-700">
                 <div>{formatPrice(m.goldPrice, m.currency, false)}</div>
                 <div className="text-[9px] text-[var(--text-secondary)] font-normal">/10g</div>
               </td>
-              <td className="text-right py-3 px-2 font-semibold text-gray-300">
+              <td className="text-right py-3 px-2 font-semibold text-gray-600">
                 <div>{formatPrice(m.silverPrice, m.currency, true)}</div>
                 <div className="text-[9px] text-[var(--text-secondary)] font-normal">/kg</div>
               </td>
-              <td className="text-right py-3 px-2 font-semibold text-orange-400 hidden md:table-cell">
+              <td className="text-right py-3 px-2 font-semibold text-orange-700 hidden md:table-cell">
                 <div>{formatPrice(m.copperPrice, m.currency, true)}</div>
                 <div className="text-[9px] text-[var(--text-secondary)] font-normal">/kg</div>
               </td>
@@ -69,10 +69,10 @@ export default function MarketTable({ markets }: MarketTableProps) {
                 <span
                   className={
                     m.gdpGrowth > 3
-                      ? "text-emerald-400"
+                      ? "text-emerald-700"
                       : m.gdpGrowth > 1
-                        ? "text-yellow-400"
-                        : "text-red-400"
+                        ? "text-amber-700"
+                        : "text-red-700"
                   }
                 >
                   {m.gdpGrowth}%
@@ -82,10 +82,10 @@ export default function MarketTable({ markets }: MarketTableProps) {
                 <span
                   className={
                     m.inflation > 4
-                      ? "text-red-400"
+                      ? "text-red-700"
                       : m.inflation > 2
-                        ? "text-yellow-400"
-                        : "text-emerald-400"
+                        ? "text-amber-700"
+                        : "text-emerald-700"
                   }
                 >
                   {m.inflation}%

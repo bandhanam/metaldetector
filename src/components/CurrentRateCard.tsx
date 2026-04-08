@@ -39,7 +39,7 @@ export default function CurrentRateCard({ prediction, market }: CurrentRateCardP
   const gradient = METAL_COLORS[prediction.metal];
 
   return (
-    <div className="glass-card p-6 md:p-8 border-2 border-white/10">
+    <div className="glass-card p-6 md:p-8 border-2 border-[var(--border)]">
       <div className="flex items-center gap-3 mb-4">
         <span className="text-4xl">{METAL_ICONS[prediction.metal]}</span>
         <div>
@@ -72,16 +72,16 @@ export default function CurrentRateCard({ prediction, market }: CurrentRateCardP
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 pt-4 border-t border-white/10">
+      <div className="grid grid-cols-2 gap-3 pt-4 border-t border-[var(--border)]">
         <div>
           <p className="text-xs text-[var(--text-secondary)] mb-1">Sentiment</p>
           <p
             className={`text-lg font-bold ${
               prediction.sentimentScore > 0
-                ? "text-emerald-400"
+                ? "text-emerald-700"
                 : prediction.sentimentScore < 0
-                  ? "text-red-400"
-                  : "text-blue-400"
+                  ? "text-red-700"
+                  : "text-blue-700"
             }`}
           >
             {prediction.sentimentScore > 0 ? "+" : ""}
@@ -90,7 +90,7 @@ export default function CurrentRateCard({ prediction, market }: CurrentRateCardP
         </div>
         <div>
           <p className="text-xs text-[var(--text-secondary)] mb-1">Confidence</p>
-          <p className="text-lg font-bold text-blue-400">
+          <p className="text-lg font-bold text-blue-700">
             {(prediction.confidence * 100).toFixed(0)}%
           </p>
         </div>

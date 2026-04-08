@@ -126,7 +126,7 @@ export default function Dashboard() {
       <div className="bg-gradient-to-r from-amber-50 via-yellow-50 to-orange-50 border-b border-amber-200">
         <div className="max-w-7xl mx-auto px-4 py-3 md:py-4">
           <div className="flex items-start gap-3">
-            <span className="text-2xl mt-0.5">🤖</span>
+            <span className="text-2xl mt-0.5">📊</span>
             <div>
               <p className="text-sm md:text-base font-semibold text-amber-700">
                 AI-Powered Intelligent Forecast System
@@ -147,7 +147,7 @@ export default function Dashboard() {
       <main className="max-w-7xl mx-auto px-4 pt-4 md:pt-6">
         {/* Error Banner */}
         {state.error && (
-          <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+          <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-300 text-red-700 text-sm">
             {state.error}
           </div>
         )}
