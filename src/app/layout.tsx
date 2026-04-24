@@ -27,6 +27,9 @@ export const metadata: Metadata = {
     icon: "/icons/favicon.png",
     apple: "/icons/icon-192.png",
   },
+  other: {
+    "google-adsense-account": "ca-pub-5999335789424982",
+  },
 };
 
 export const viewport: Viewport = {
