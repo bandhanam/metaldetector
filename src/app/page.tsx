@@ -1,5 +1,6 @@
 import DashboardClient from "@/components/DashboardClient";
 import SEOContent from "@/components/SEOContent";
+import AdBanner from "@/components/AdBanner";
 
 export default function Page() {
   return (
@@ -8,6 +9,11 @@ export default function Page() {
 
       {/* Server-rendered SEO content — visible to Google crawler */}
       <SEOContent />
+
+      {/* Ad: Before disclaimer */}
+      <div className="max-w-7xl mx-auto px-4 mt-6">
+        <AdBanner slot="3456789012" format="horizontal" className="rounded-xl overflow-hidden" />
+      </div>
 
       {/* Disclaimer */}
       <div className="max-w-7xl mx-auto px-4 mt-8 md:mt-10">
