@@ -17,6 +17,10 @@ const SentimentChart = dynamic(() => import("@/components/SentimentChart"), { ss
 const ComparisonChart = dynamic(() => import("@/components/ComparisonChart"), { ssr: false });
 const AdBanner = dynamic(() => import("@/components/AdBanner"), { ssr: false });
 const InvestmentSuggestions = dynamic(() => import("@/components/InvestmentSuggestions"), { ssr: false });
+const GoldPurityCalculator = dynamic(() => import("@/components/GoldPurityCalculator"), { ssr: false });
+const AuspiciousDays = dynamic(() => import("@/components/AuspiciousDays"), { ssr: false });
+const ShareButton = dynamic(() => import("@/components/ShareButton"), { ssr: false });
+const PriceAlert = dynamic(() => import("@/components/PriceAlert"), { ssr: false });
 
 interface AppState {
   data: DashboardData | null;
@@ -147,6 +151,12 @@ export default function DashboardClient() {
         </div>
       </div>
 
+      {/* Auspicious Day Alert */}
+      <AuspiciousDays
+        predictions={state.data?.auspiciousPredictions}
+        market={selectedMarket}
+      />
+
       {/* Ad: Below Hero */}
       <div className="max-w-7xl mx-auto px-4 pt-3">
         <AdBanner slot="1234567890" format="horizontal" className="rounded-xl overflow-hidden" />
@@ -201,9 +211,12 @@ export default function DashboardClient() {
                     Tap a metal to view detailed insights, predictions & analysis below
                   </p>
                 </div>
-                <span className="text-xs text-[var(--text-secondary)] hidden sm:block">
-                  ↓ Scroll down for full analysis
-                </span>
+                <div className="flex items-center gap-2">
+                  <ShareButton market={selectedMarket} />
+                  <span className="text-xs text-[var(--text-secondary)] hidden sm:block">
+                    ↓ Scroll down
+                  </span>
+                </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
                 {state.data.predictions.map((pred, i) => (
@@ -218,13 +231,23 @@ export default function DashboardClient() {
               </div>
             </div>
 
+            {/* Gold Purity Calculator */}
+            <div className="mb-4 md:mb-6">
+              <GoldPurityCalculator market={selectedMarket} />
+            </div>
+
+            {/* Price Alert */}
+            <div className="mb-4 md:mb-6">
+              <PriceAlert market={selectedMarket} />
+            </div>
+
             {/* Tab Navigation */}
-            <div className="flex gap-1 mb-4 md:mb-6 p-1 bg-gray-100 rounded-xl w-fit">
+            <div className="flex gap-1 mb-4 md:mb-6 p-1 bg-gray-100 rounded-xl w-fit overflow-x-auto">
               {(["overview", "markets", "news"] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all capitalize ${
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all capitalize whitespace-nowrap ${
                     activeTab === tab
                       ? "bg-white text-[var(--text-primary)] shadow-sm"
                       : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-gray-50"
@@ -233,6 +256,12 @@ export default function DashboardClient() {
                   {tab}
                 </button>
               ))}
+              <a
+                href="/wedding-gold-planner"
+                className="px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-gray-50 flex items-center gap-1"
+              >
+                💍 Wedding Planner
+              </a>
             </div>
 
             {/* Overview Tab */}

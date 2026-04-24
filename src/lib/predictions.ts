@@ -11,7 +11,7 @@ import {
   isHFAvailable,
   extractTimeSeriesFeatures 
 } from "./huggingface";
-import { ensembleSmartPredict } from "./advanced-predictor";
+import { ensembleSmartPredict, predictForDate } from "./advanced-predictor";
 import { addDays, addWeeks, addMonths, format } from "date-fns";
 
 async function enhanceNewsWithHF(news: NewsArticle[]): Promise<NewsArticle[]> {
@@ -59,12 +59,35 @@ function generateFactors(
     recentTrend = avgFirst > 0 ? (avgSecond - avgFirst) / avgFirst : 0;
   }
 
+  // RSI-based technical signal
+  let rsiValue = 50;
+  if (metalPrices.length >= 3) {
+    let gains = 0, losses = 0;
+    for (let i = 1; i < metalPrices.length; i++) {
+      const d = metalPrices[i] - metalPrices[i - 1];
+      if (d > 0) gains += d; else losses -= d;
+    }
+    const period = metalPrices.length - 1;
+    const avgG = gains / period;
+    const avgL = losses / period;
+    rsiValue = avgL === 0 ? 100 : 100 - 100 / (1 + avgG / avgL);
+  }
+  const rsiImpact = rsiValue > 70 ? "bearish" : rsiValue < 30 ? "bullish" : "neutral";
+  const rsiDesc = rsiValue > 70 ? "overbought" : rsiValue < 30 ? "oversold" : "neutral range";
+
+  factors.push({
+    name: "Technical Indicators (RSI)",
+    impact: rsiImpact,
+    weight: 0.18,
+    description: `RSI at ${rsiValue.toFixed(0)} (${rsiDesc}). ${rsiValue > 70 ? "Overbought — potential pullback ahead." : rsiValue < 30 ? "Oversold — potential bounce ahead." : "No extreme signal from RSI."}`,
+  });
+
   const trendImpact = recentTrend > 0.01 ? "bullish" : recentTrend < -0.01 ? "bearish" : "neutral";
   factors.push({
-    name: "Historical Price Trend",
+    name: "Price Momentum",
     impact: trendImpact,
-    weight: 0.22,
-    description: `Recent ${metalPrices.length}-day trend shows ${recentTrend > 0 ? "+" : ""}${(recentTrend * 100).toFixed(2)}% movement. Historical patterns suggest ${trendImpact === "neutral" ? "consolidation" : `continued ${trendImpact} momentum`}.`,
+    weight: 0.20,
+    description: `Recent ${metalPrices.length}-day trend: ${recentTrend > 0 ? "+" : ""}${(recentTrend * 100).toFixed(2)}%. ${trendImpact === "neutral" ? "Consolidation phase." : `${trendImpact === "bullish" ? "Upward" : "Downward"} momentum continues.`}`,
   });
 
   const sentimentImpact =
@@ -73,8 +96,23 @@ function generateFactors(
     name: "News Sentiment Analysis",
     impact: sentimentImpact,
     weight: 0.20,
-    description: `Analysis of ${news.length} global articles shows ${sentimentImpact} sentiment (${(overallSentiment * 100).toFixed(1)}%). Intensity: ${(sentimentFeatures.intensity * 100).toFixed(0)}%${isHFAvailable() ? " (Enhanced with FinBERT)" : ""}.`,
+    description: `Analysis of ${news.length} global articles: ${sentimentImpact} (${(overallSentiment * 100).toFixed(1)}%). Intensity: ${(sentimentFeatures.intensity * 100).toFixed(0)}%${isHFAvailable() ? " (FinBERT-enhanced)" : ""}.`,
   });
+
+  // Indian seasonal demand factor
+  const now = new Date();
+  const month = now.getMonth();
+  const isHighDemand = (metal === "gold" || metal === "silver") && (month >= 9 || month <= 1);
+  if (metal === "gold" || metal === "silver") {
+    factors.push({
+      name: "Indian Seasonal Demand",
+      impact: isHighDemand ? "bullish" : "neutral",
+      weight: 0.12,
+      description: isHighDemand
+        ? "Wedding season (Oct-Feb) and festival demand driving prices higher. Dhanteras, Diwali, and wedding purchases peak."
+        : "Off-peak season for Indian gold demand. Lower retail buying pressure.",
+    });
+  }
 
   const geopoliticalNews = news.filter(
     (n) =>
@@ -92,26 +130,7 @@ function generateFactors(
       name: "Geopolitical Risk",
       impact,
       weight: metal === "gold" ? 0.18 : 0.12,
-      description: `${geopoliticalNews.length} conflict/tension reports detected. Risk level: ${(geoRisk * 100).toFixed(0)}%. ${metal === "gold" ? "Safe-haven demand typically increases during uncertainty." : "Supply chain disruptions may affect industrial metals."}`,
-    });
-  }
-
-  const inflationNews = news.filter(
-    (n) =>
-      /inflation|cpi|consumer price|price index|rising prices/i.test(n.title + " " + n.description)
-  );
-  if (inflationNews.length > 0) {
-    const inflationSentiment =
-      inflationNews.reduce((s, n) => s + n.sentiment, 0) / inflationNews.length;
-    const impact = metal === "gold" 
-      ? (inflationSentiment > 0 ? "bullish" : "neutral")
-      : (inflationSentiment > 0.15 ? "bearish" : "neutral");
-    
-    factors.push({
-      name: "Inflation Outlook",
-      impact,
-      weight: 0.16,
-      description: `${inflationNews.length} inflation-related reports. ${metal === "gold" ? "Gold historically serves as inflation hedge." : "High inflation may reduce industrial demand."}`,
+      description: `${geopoliticalNews.length} conflict/tension reports. Risk: ${(geoRisk * 100).toFixed(0)}%. ${metal === "gold" ? "Safe-haven demand typically rises." : "Supply chain disruptions possible."}`,
     });
   }
 
@@ -129,7 +148,7 @@ function generateFactors(
       name: "Monetary Policy",
       impact,
       weight: 0.15,
-      description: `${cbNews.length} central bank updates. Hawkish policy (rate hikes) typically pressures metal prices. Dovish stance supports prices.`,
+      description: `${cbNews.length} central bank updates. ${cbSentiment > 0.1 ? "Hawkish stance pressures metals." : cbSentiment < -0.1 ? "Dovish stance supports metals." : "Neutral monetary outlook."}`,
     });
   }
 
@@ -146,7 +165,7 @@ function generateFactors(
         name: "China Economic Outlook",
         impact,
         weight: 0.20,
-        description: `${chinaNews.length} China-related reports. China consumes ~50% of global copper. Economic sentiment: ${chinaSentiment > 0 ? "positive" : chinaSentiment < 0 ? "negative" : "neutral"}.`,
+        description: `${chinaNews.length} China reports. China consumes ~50% of global copper. Sentiment: ${chinaSentiment > 0 ? "positive" : chinaSentiment < 0 ? "negative" : "neutral"}.`,
       });
     }
   }
@@ -163,23 +182,7 @@ function generateFactors(
       name: "USD Strength",
       impact: dollarSentiment > 0.1 ? "bearish" : dollarSentiment < -0.1 ? "bullish" : "neutral",
       weight: 0.14,
-      description: `${dollarNews.length} currency reports. Strong dollar makes metals expensive for international buyers, typically pressuring prices.`,
-    });
-  }
-
-  const supplyNews = news.filter(
-    (n) =>
-      /supply chain|shortage|production cut|mining|output|supply disruption/i.test(
-        n.title + " " + n.description
-      )
-  );
-  if (supplyNews.length > 0) {
-    const supplySentiment = supplyNews.reduce((s, n) => s + n.sentiment, 0) / supplyNews.length;
-    factors.push({
-      name: "Supply Dynamics",
-      impact: supplySentiment < -0.1 ? "bullish" : supplySentiment > 0.1 ? "bearish" : "neutral",
-      weight: 0.12,
-      description: `${supplyNews.length} supply/production reports. Disruptions typically support prices; increased output pressures them.`,
+      description: `${dollarNews.length} currency reports. ${dollarSentiment > 0.1 ? "Strong dollar pressures metals." : dollarSentiment < -0.1 ? "Weak dollar supports metals." : "Stable dollar — neutral impact."}`,
     });
   }
 
@@ -238,14 +241,14 @@ export async function generatePredictions(
         enhancedNews,
         prices,
         metal,
-        3
+        5
       );
 
-      const trendAdjustment = tsFeatures.trend * Math.min(tf.days, 7) * 0.1;
+      const trendAdjustment = tsFeatures.trend * Math.min(tf.days, 7) * 0.08;
       
       let finalPredicted = result.predicted * (1 + trendAdjustment);
-      let finalLow = result.low * (1 + trendAdjustment * 0.5);
-      let finalHigh = result.high * (1 + trendAdjustment * 0.5);
+      let finalLow = result.low * (1 + trendAdjustment * 0.4);
+      let finalHigh = result.high * (1 + trendAdjustment * 0.4);
 
       if (isNaN(finalPredicted) || finalPredicted <= 0) finalPredicted = currentPrice;
       if (isNaN(finalLow) || finalLow <= 0) finalLow = finalPredicted * 0.95;
@@ -301,5 +304,75 @@ export async function generatePredictions(
   });
 
   predictionCache = { key: cacheKey, data: results, at: Date.now() };
+  return results;
+}
+
+// ── Auspicious Date Predictions (server-side) ──
+
+export interface AuspiciousDatePrediction {
+  date: string;
+  name: string;
+  daysAway: number;
+  goldPredicted: number;
+  goldLow: number;
+  goldHigh: number;
+  goldChangePercent: number;
+  silverPredicted: number;
+  silverChangePercent: number;
+}
+
+export function generateAuspiciousPredictions(
+  prices: MetalPrice[],
+  news: NewsArticle[]
+): AuspiciousDatePrediction[] {
+  const AUSPICIOUS_DATES = [
+    { date: "2026-01-14", name: "Makar Sankranti" },
+    { date: "2026-01-29", name: "Vasant Panchami" },
+    { date: "2026-03-14", name: "Holika Dahan" },
+    { date: "2026-03-25", name: "Gudi Padwa / Ugadi" },
+    { date: "2026-04-14", name: "Baisakhi / Tamil New Year" },
+    { date: "2026-04-26", name: "Akshaya Tritiya" },
+    { date: "2026-07-10", name: "Rath Yatra" },
+    { date: "2026-08-12", name: "Janmashtami" },
+    { date: "2026-10-02", name: "Navratri Begins" },
+    { date: "2026-10-12", name: "Dussehra" },
+    { date: "2026-10-29", name: "Dhanteras" },
+    { date: "2026-10-31", name: "Diwali" },
+    { date: "2026-11-02", name: "Govardhan Puja" },
+    { date: "2026-11-16", name: "Dev Deepawali" },
+  ];
+
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+
+  const goldPrice = prices.find(p => p.metal === "gold")?.price_usd || 0;
+  const silverPrice = prices.find(p => p.metal === "silver")?.price_usd || 0;
+
+  if (goldPrice === 0) return [];
+
+  const results: AuspiciousDatePrediction[] = [];
+
+  for (const event of AUSPICIOUS_DATES) {
+    const eventDate = new Date(event.date + "T00:00:00");
+    const daysAway = Math.ceil((eventDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    if (daysAway < 0) continue;
+    if (daysAway > 365) continue;
+
+    const goldPred = predictForDate(goldPrice, eventDate, news, prices, "gold");
+    const silverPred = predictForDate(silverPrice, eventDate, news, prices, "silver");
+
+    results.push({
+      date: event.date,
+      name: event.name,
+      daysAway,
+      goldPredicted: goldPred.predicted,
+      goldLow: goldPred.low,
+      goldHigh: goldPred.high,
+      goldChangePercent: goldPred.changePercent,
+      silverPredicted: silverPred.predicted,
+      silverChangePercent: silverPred.changePercent,
+    });
+  }
+
   return results;
 }

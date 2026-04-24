@@ -5,20 +5,23 @@ export default function SEOContent() {
 
         {/* What is Metal Detector */}
         <div className="glass-card p-6 md:p-8">
-          <h2 className="text-xl md:text-2xl font-bold mb-4">
+          <h2 className="text-xl md:text-2xl font-bold mb-1">
             What is Metal Detector?
           </h2>
+          <p className="text-xs text-amber-600 mb-4">
+            सोने का भाव आज · चांदी का भाव · तांबे का दाम · Gold Rate Today India
+          </p>
           <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4">
             Metal Detector is India&apos;s leading AI-powered precious metal price tracking and prediction platform.
-            We provide real-time gold rates, silver prices, and copper rates for India and global markets including
-            the US, China, Europe, and Japan. Our platform uses advanced machine learning algorithms, natural language
-            processing, and financial sentiment analysis to generate accurate price forecasts across multiple timeframes
-            — from tomorrow to 3 months ahead.
+            We provide real-time gold rates (सोने का भाव), silver prices (चांदी का भाव), and copper rates (तांबे का दाम)
+            for India and global markets including the US, China, Europe, and Japan. Our platform uses advanced machine
+            learning algorithms, natural language processing, and financial sentiment analysis to generate accurate price
+            forecasts across multiple timeframes — from tomorrow to 3 months ahead.
           </p>
           <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
-            Whether you&apos;re a jewellery buyer checking today&apos;s gold rate per 10 grams, a commodity trader
-            analyzing silver price trends, or an investor looking for data-driven metal market insights, Metal Detector
-            delivers the real-time data and AI predictions you need to make informed decisions.
+            Whether you&apos;re a jewellery buyer checking today&apos;s gold rate per 10 grams (आज सोने का 10 ग्राम का रेट),
+            a commodity trader analyzing silver price trends, or an investor looking for data-driven metal market insights,
+            Metal Detector delivers the real-time data and AI predictions you need to make informed decisions.
           </p>
         </div>
 
@@ -60,9 +63,10 @@ export default function SEOContent() {
 
         {/* Gold Price Information */}
         <div className="glass-card p-6 md:p-8">
-          <h2 className="text-xl md:text-2xl font-bold mb-4">
+          <h2 className="text-xl md:text-2xl font-bold mb-1">
             Gold Price Today in India — Complete Guide
           </h2>
+          <p className="text-xs text-amber-600 mb-4">आज सोने का भाव · Aaj Sone Ka Bhav · 24K 22K 18K Gold Rate</p>
           <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed">
             <p>
               Gold has been India&apos;s most trusted investment for centuries. The gold rate today in India is
@@ -114,9 +118,10 @@ export default function SEOContent() {
 
         {/* Silver Price Information */}
         <div className="glass-card p-6 md:p-8">
-          <h2 className="text-xl md:text-2xl font-bold mb-4">
+          <h2 className="text-xl md:text-2xl font-bold mb-1">
             Silver Price Today — Investment &amp; Industrial Metal
           </h2>
+          <p className="text-xs text-amber-600 mb-4">आज चांदी का भाव · Aaj Chandi Ka Bhav · Silver Rate per Kg</p>
           <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed">
             <p>
               Silver occupies a unique position as both a precious metal and an industrial commodity. While silver
@@ -153,9 +158,10 @@ export default function SEOContent() {
 
         {/* Copper Price Information */}
         <div className="glass-card p-6 md:p-8">
-          <h2 className="text-xl md:text-2xl font-bold mb-4">
+          <h2 className="text-xl md:text-2xl font-bold mb-1">
             Copper Price Today — The Economic Bellwether
           </h2>
+          <p className="text-xs text-amber-600 mb-4">आज तांबे का भाव · Aaj Tambe Ka Bhav · Copper Rate per Kg</p>
           <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed">
             <p>
               Copper is often called &quot;Dr. Copper&quot; by economists because its price trends closely mirror
@@ -233,5 +239,13 @@ const FAQ_ITEMS = [
   {
     q: "Is there a mobile app available?",
     a: "Metal Detector is a Progressive Web App (PWA), which means you can install it on your Android or iOS device directly from the browser. On Android, tap the 'Add to Home Screen' prompt. On iOS, tap Share > Add to Home Screen. The app works offline and receives automatic updates.",
+  },
+  {
+    q: "How to calculate gold jewellery cost with making charges? (सोने के गहनों की कीमत कैसे निकालें?)",
+    a: "Use our Gold Purity Calculator on the homepage. Enter the weight in grams, select purity (22K for standard jewellery), and enter making charge percentage (typically 8-25%). The calculator shows gold value + making charges + 3% GST = total estimated cost. This helps you verify jeweller quotes.",
+  },
+  {
+    q: "How much gold do I need for an Indian wedding? (शादी के लिए कितना सोना चाहिए?)",
+    a: "It varies by region and tradition — typically 50-200g total. Use our Wedding Gold Planner tool (/wedding-gold-planner) to add specific jewellery items and get a total cost estimate at today's rate, plus an AI prediction of whether to buy now or wait 3 months.",
   },
 ];

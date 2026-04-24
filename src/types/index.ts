@@ -57,10 +57,23 @@ export interface MarketData {
   centralBankRate: number;
 }
 
+export interface AuspiciousDatePrediction {
+  date: string;
+  name: string;
+  daysAway: number;
+  goldPredicted: number;
+  goldLow: number;
+  goldHigh: number;
+  goldChangePercent: number;
+  silverPredicted: number;
+  silverChangePercent: number;
+}
+
 export interface DashboardData {
   prices: MetalPrice[];
   predictions: PricePrediction[];
   news: NewsArticle[];
   markets: MarketData[];
+  auspiciousPredictions: AuspiciousDatePrediction[];
   lastUpdated: string;
 }

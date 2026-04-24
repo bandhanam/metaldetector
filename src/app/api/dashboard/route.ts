@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { initDatabase } from "@/lib/db";
 import { getNews } from "@/lib/news";
 import { fetchCurrentPrices, getMarketData } from "@/lib/prices";
-import { generatePredictions } from "@/lib/predictions";
+import { generatePredictions, generateAuspiciousPredictions } from "@/lib/predictions";
 import { DashboardData } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -18,12 +18,14 @@ export async function GET() {
 
     const predictions = await generatePredictions(prices, news);
     const markets = getMarketData(prices);
+    const auspiciousPredictions = generateAuspiciousPredictions(prices, news);
 
     const dashboardData: DashboardData = {
       prices,
       predictions,
       news,
       markets,
+      auspiciousPredictions,
       lastUpdated: new Date().toISOString(),
     };
 
