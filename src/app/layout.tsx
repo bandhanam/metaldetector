@@ -89,7 +89,7 @@ export default function RootLayout({
               },
               creator: {
                 "@type": "Organization",
-                name: "Metal Detector",
+                name: "Bandhanam Private Limited",
                 url: "https://metaldetector-digger.vercel.app/about",
               },
             }),

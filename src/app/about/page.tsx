@@ -16,12 +16,23 @@ export default function About() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8 md:py-12">
-        <h1 className="text-2xl md:text-3xl font-bold gradient-text mb-8">About Metal Detector</h1>
+        {/* Company Header */}
+        <div className="flex items-center gap-4 mb-8">
+          <img
+            src="/icons/bandhanam-logo.png"
+            alt="Bandhanam Private Limited"
+            className="w-16 h-16 md:w-20 md:h-20 rounded-xl object-contain"
+          />
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold gradient-text">About Metal Detector</h1>
+            <p className="text-sm text-[var(--text-secondary)] mt-1">A product by <strong className="text-[var(--text-primary)]">Bandhanam Private Limited</strong></p>
+          </div>
+        </div>
 
         <div className="space-y-6 text-sm text-[var(--text-secondary)] leading-relaxed">
           <section>
             <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">What is Metal Detector?</h2>
-            <p>Metal Detector is an AI-powered precious metal price tracking and prediction platform. We provide real-time gold, silver, and platinum prices for India and global markets, along with intelligent price forecasts powered by machine learning and news sentiment analysis.</p>
+            <p>Metal Detector is an AI-powered precious metal price tracking and prediction platform built by <strong>Bandhanam Private Limited</strong>. We provide real-time gold, silver, and platinum prices for India and global markets, along with intelligent price forecasts powered by machine learning and news sentiment analysis.</p>
           </section>
 
           <section>

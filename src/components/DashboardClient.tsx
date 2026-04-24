@@ -94,16 +94,18 @@ export default function DashboardClient() {
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-[var(--bg-primary)]/80 border-b border-[var(--border)]">
         <div className="max-w-7xl mx-auto px-4 py-3 md:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-yellow-400 via-amber-500 to-orange-600 flex items-center justify-center text-lg md:text-xl">
-                ⚡
-              </div>
+            <div className="flex items-center gap-2.5">
+              <img
+                src="/icons/bandhanam-logo.png"
+                alt="Bandhanam"
+                className="w-9 h-9 md:w-10 md:h-10 rounded-xl object-contain"
+              />
               <div>
                 <h1 className="text-lg md:text-xl font-extrabold gradient-text">
                   Metal Detector
                 </h1>
                 <p className="text-[10px] md:text-xs text-[var(--text-secondary)] hidden sm:block">
-                  AI-Powered Metal Price Predictions
+                  by Bandhanam Pvt. Ltd. · AI-Powered Predictions
                 </p>
               </div>
             </div>
