@@ -1,4 +1,4 @@
-const CACHE_NAME = "metal-detector-v1";
+const CACHE_NAME = "metal-detector-v2";
 const OFFLINE_URL = "/";
 
 const PRECACHE_URLS = [
@@ -42,5 +42,41 @@ self.addEventListener("fetch", (event) => {
         return response;
       })
       .catch(() => caches.match(event.request))
+  );
+});
+
+self.addEventListener("push", (event) => {
+  let data = { title: "Metal Detector", body: "Check latest metal prices!", url: "/" };
+  try {
+    if (event.data) data = event.data.json();
+  } catch {
+    // use defaults
+  }
+
+  event.waitUntil(
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: "/icons/icon-192.png",
+      badge: "/icons/favicon.png",
+      vibrate: [200, 100, 200],
+      tag: "metal-price-alert",
+      renotify: true,
+      data: { url: data.url || "/" },
+    })
+  );
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const url = event.notification.data?.url || "/";
+  event.waitUntil(
+    self.clients.matchAll({ type: "window" }).then((clients) => {
+      for (const client of clients) {
+        if (client.url.includes(self.location.origin) && "focus" in client) {
+          return client.focus();
+        }
+      }
+      return self.clients.openWindow(url);
+    })
   );
 });

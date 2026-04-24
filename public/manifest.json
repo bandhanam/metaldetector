@@ -1,7 +1,8 @@
 {
   "name": "Metal Detector - Live Gold, Silver & Platinum Prices",
   "short_name": "Metal Detector",
-  "description": "AI-powered live gold, silver & platinum price predictions with real-time rates for India and global markets.",
+  "description": "AI-powered live gold, silver & platinum price predictions. Sone ka bhav aaj, chandi ka rate, platinum ka dam. Real-time rates for India.",
+  "lang": "en-IN",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",

@@ -21,6 +21,9 @@ const GoldPurityCalculator = dynamic(() => import("@/components/GoldPurityCalcul
 const AuspiciousDays = dynamic(() => import("@/components/AuspiciousDays"), { ssr: false });
 const ShareButton = dynamic(() => import("@/components/ShareButton"), { ssr: false });
 const PriceAlert = dynamic(() => import("@/components/PriceAlert"), { ssr: false });
+const PushNotification = dynamic(() => import("@/components/PushNotification"), { ssr: false });
+const WeddingSeasonBanner = dynamic(() => import("@/components/WeddingSeasonBanner"), { ssr: false });
+const DigitalGoldPartners = dynamic(() => import("@/components/DigitalGoldPartners"), { ssr: false });
 
 interface AppState {
   data: DashboardData | null;
@@ -115,6 +118,7 @@ export default function DashboardClient() {
                   </span>
                 </div>
               )}
+              {selectedMarket && <PushNotification market={selectedMarket} />}
               <button
                 onClick={fetchData}
                 disabled={state.loading}
@@ -150,6 +154,9 @@ export default function DashboardClient() {
           </div>
         </div>
       </div>
+
+      {/* Wedding Season Banner (Oct-Feb + Akshaya Tritiya) */}
+      <WeddingSeasonBanner market={selectedMarket} />
 
       {/* Auspicious Day Alert */}
       <AuspiciousDays
@@ -239,6 +246,11 @@ export default function DashboardClient() {
             {/* Price Alert */}
             <div className="mb-4 md:mb-6">
               <PriceAlert market={selectedMarket} />
+            </div>
+
+            {/* Digital Gold Investment Platforms */}
+            <div className="mb-4 md:mb-6">
+              <DigitalGoldPartners />
             </div>
 
             {/* Tab Navigation */}

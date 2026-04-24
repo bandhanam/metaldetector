@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Metal Detector - Live Gold, Silver & Platinum Prices India",
   description:
-    "Live gold price today in India per 10 gram. AI-powered Gold, Silver & Platinum price predictions with real-time rates and market analysis.",
+    "Live gold price today in India per 10 gram (सोने का भाव आज). AI-powered Gold, Silver & Platinum price predictions. Aaj ka sone ka rate, chandi ka bhav, platinum rate with real-time market analysis.",
   keywords: [
     "gold price today",
     "gold rate today India",
@@ -17,6 +17,16 @@ export const metadata: Metadata = {
     "24 karat gold rate",
     "MCX gold",
     "gold price per 10 gram",
+    "sone ka bhav",
+    "aaj ka sone ka rate",
+    "sone ka bhav aaj ka",
+    "chandi ka bhav",
+    "gold rate today in hindi",
+    "aaj sone ka dam",
+    "22 carat gold price",
+    "platinum ka bhav",
+    "gold price prediction India",
+    "sonay ka rate aaj",
   ],
   manifest: "/manifest.json",
   appleWebApp: {
