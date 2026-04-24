@@ -57,6 +57,73 @@ export default function RootLayout({
       </head>
       <body className="antialiased min-h-screen">
         {children}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              name: "Metal Detector",
+              url: "https://metaldetector-digger.vercel.app",
+              description: "AI-powered live gold, silver & copper price predictions with real-time rates for India and global markets.",
+              applicationCategory: "FinanceApplication",
+              operatingSystem: "Web",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "INR",
+              },
+              creator: {
+                "@type": "Organization",
+                name: "Metal Detector",
+                url: "https://metaldetector-digger.vercel.app/about",
+              },
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: "How often are the gold, silver, and copper prices updated?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Prices are updated in real-time, refreshing every 60 seconds from COMEX/LBMA spot markets with live INR exchange rates.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Why is the Indian gold price different from international price?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Indian gold prices include 6% import duty, 3% GST, AIDC surcharges, and local market premiums — adding approximately 7-8% to international prices.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "What is the gold rate per 10 grams today?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Metal Detector shows live gold rate per 10 grams in Indian Rupees (INR), updated every 60 seconds including all applicable import duties, GST, and market premiums.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "How accurate are the AI price predictions?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Our ensemble model achieves 70-80% accuracy for next-day predictions and 55-65% for 3-month forecasts. Confidence scores are always displayed.",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
       </body>
     </html>
   );
