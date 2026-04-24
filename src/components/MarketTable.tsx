@@ -29,7 +29,7 @@ export default function MarketTable({ markets }: MarketTableProps) {
               <span className="text-gray-600">Silver</span>
             </th>
             <th className="text-right py-2 px-2 font-medium hidden md:table-cell">
-              <span className="text-orange-700">Copper</span>
+              <span className="text-indigo-700">Platinum</span>
             </th>
             <th className="text-right py-2 px-2 font-medium hidden lg:table-cell">GDP</th>
             <th className="text-right py-2 px-2 font-medium hidden lg:table-cell">CPI</th>
@@ -61,9 +61,9 @@ export default function MarketTable({ markets }: MarketTableProps) {
                 <div>{formatPrice(m.silverPrice, m.currency, true)}</div>
                 <div className="text-[9px] text-[var(--text-secondary)] font-normal">/kg</div>
               </td>
-              <td className="text-right py-3 px-2 font-semibold text-orange-700 hidden md:table-cell">
-                <div>{formatPrice(m.copperPrice, m.currency, true)}</div>
-                <div className="text-[9px] text-[var(--text-secondary)] font-normal">/kg</div>
+              <td className="text-right py-3 px-2 font-semibold text-indigo-700 hidden md:table-cell">
+                <div>{formatPrice(m.platinumPrice, m.currency, true)}</div>
+                <div className="text-[9px] text-[var(--text-secondary)] font-normal">/10g</div>
               </td>
               <td className="text-right py-3 px-2 hidden lg:table-cell">
                 <span
@@ -102,7 +102,7 @@ export default function MarketTable({ markets }: MarketTableProps) {
   );
 }
 
-function formatPrice(price: number, currency: string, isCopper: boolean = false): string {
+function formatPrice(price: number, currency: string, _isPlatinum: boolean = false): string {
   const symbols: Record<string, string> = {
     USD: "$",
     INR: "₹",
@@ -111,7 +111,7 @@ function formatPrice(price: number, currency: string, isCopper: boolean = false)
     JPY: "¥",
   };
   
-  if (currency === "JPY" && !isCopper) {
+  if (currency === "JPY") {
     return `${symbols[currency]}${Math.round(price).toLocaleString()}`;
   }
   

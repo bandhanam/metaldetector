@@ -9,11 +9,11 @@ export default function SEOContent() {
             What is Metal Detector?
           </h2>
           <p className="text-xs text-amber-600 mb-4">
-            सोने का भाव आज · चांदी का भाव · तांबे का दाम · Gold Rate Today India
+            सोने का भाव आज · चांदी का भाव · प्लैटिनम का भाव · Gold Rate Today India
           </p>
           <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4">
             Metal Detector is India&apos;s leading AI-powered precious metal price tracking and prediction platform.
-            We provide real-time gold rates (सोने का भाव), silver prices (चांदी का भाव), and copper rates (तांबे का दाम)
+            We provide real-time gold rates (सोने का भाव), silver prices (चांदी का भाव), and platinum rates (प्लैटिनम का भाव)
             for India and global markets including the US, China, Europe, and Japan. Our platform uses advanced machine
             learning algorithms, natural language processing, and financial sentiment analysis to generate accurate price
             forecasts across multiple timeframes — from tomorrow to 3 months ahead.
@@ -156,33 +156,35 @@ export default function SEOContent() {
           </div>
         </div>
 
-        {/* Copper Price Information */}
+        {/* Platinum Price Information */}
         <div className="glass-card p-6 md:p-8">
           <h2 className="text-xl md:text-2xl font-bold mb-1">
-            Copper Price Today — The Economic Bellwether
+            Platinum Price Today — The Precious Industrial Metal
           </h2>
-          <p className="text-xs text-amber-600 mb-4">आज तांबे का भाव · Aaj Tambe Ka Bhav · Copper Rate per Kg</p>
+          <p className="text-xs text-amber-600 mb-4">आज प्लैटिनम का भाव · Aaj Platinum Ka Bhav · Platinum Rate per 10g</p>
           <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed">
             <p>
-              Copper is often called &quot;Dr. Copper&quot; by economists because its price trends closely mirror
-              global economic health. As the third most consumed industrial metal after iron and aluminium, copper
-              demand is driven by construction, electrical wiring, plumbing, industrial machinery, and increasingly
-              by the green energy transition.
+              Platinum is one of the rarest precious metals on Earth — approximately 30 times rarer than gold.
+              It occupies a unique position as both a precious metal for jewellery and investment, and a critical
+              industrial metal used in catalytic converters, hydrogen fuel cells, electronics, and chemical refining.
+              About 40% of platinum demand comes from the automotive sector alone.
             </p>
             <p>
-              Copper is priced <strong>per kilogram</strong> in India (internationally per pound on COMEX or per
-              tonne on LME). India is the world&apos;s seventh-largest copper consumer, with demand growing at
-              approximately 8% annually — driven by urbanization, infrastructure development, and the push toward
-              electric vehicles and renewable energy.
+              Platinum is priced <strong>per 10 grams</strong> in India (internationally per troy ounce on NYMEX/LPPM).
+              In India, platinum jewellery is gaining popularity among younger buyers who prefer its white lustre
+              and hypoallergenic properties over white gold. The platinum-to-gold ratio is a key metric — historically
+              platinum traded at a premium to gold, but since 2015 it has traded at a discount, creating potential
+              value opportunities.
             </p>
             <h3 className="text-base font-semibold text-[var(--text-primary)] pt-2">
-              Copper in the Energy Transition
+              Platinum in the Hydrogen Economy
             </h3>
             <p>
-              The global shift to clean energy is fundamentally copper-intensive. An electric vehicle uses 3-4 times
-              more copper than a conventional car (approximately 83 kg vs 23 kg). A single offshore wind turbine
-              requires up to 8 tonnes of copper. This structural demand growth, combined with declining ore grades
-              and multi-year mine development timelines, creates a bullish long-term outlook for copper prices.
+              The emerging hydrogen economy is a major growth driver for platinum. Proton Exchange Membrane (PEM)
+              fuel cells use platinum as a catalyst — each fuel cell vehicle requires 30-60 grams of platinum.
+              With governments worldwide pushing hydrogen as a clean fuel alternative, platinum demand from fuel cells
+              is projected to grow 10x by 2030. Combined with tightening emission norms requiring more platinum in
+              catalytic converters, the long-term demand outlook for platinum is strongly bullish.
             </p>
           </div>
         </div>
@@ -209,7 +211,7 @@ export default function SEOContent() {
 
 const FAQ_ITEMS = [
   {
-    q: "How often are the gold, silver, and copper prices updated?",
+    q: "How often are the gold, silver, and platinum prices updated?",
     a: "Prices are updated in real-time, refreshing every 60 seconds from COMEX/LBMA spot markets. Exchange rates are also fetched live, so the Indian Rupee prices you see reflect the very latest international rates and currency movements.",
   },
   {
@@ -225,7 +227,7 @@ const FAQ_ITEMS = [
     a: "Our dashboard shows the live gold rate per 10 grams in Indian Rupees (INR), updated every 60 seconds. The rate includes all applicable import duties, GST, and market premiums. You can also view rates in USD, EUR, CNY, and JPY by switching the country selector.",
   },
   {
-    q: "Should I invest in gold, silver, or copper?",
+    q: "Should I invest in gold, silver, or platinum?",
     a: "Our AI Investment Suggestions panel analyzes prediction trends, sentiment scores, and market factors to provide buy/hold/sell signals for each metal. However, these are AI-generated suggestions for informational purposes only — not financial advice. Always consult a qualified financial advisor, consider your risk tolerance, and do your own research before investing.",
   },
   {

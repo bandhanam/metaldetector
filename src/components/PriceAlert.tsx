@@ -8,7 +8,7 @@ interface PriceAlertProps {
 }
 
 interface AlertTarget {
-  metal: "gold" | "silver" | "copper";
+  metal: "gold" | "silver" | "platinum";
   targetPrice: number;
 }
 
@@ -35,7 +35,7 @@ export default function PriceAlert({ market }: PriceAlertProps) {
   const [alerts, setAlerts] = useState<AlertTarget[]>([]);
   const [triggered, setTriggered] = useState<{ metal: string; target: number }[]>([]);
   const [showForm, setShowForm] = useState(false);
-  const [formMetal, setFormMetal] = useState<"gold" | "silver" | "copper">("gold");
+  const [formMetal, setFormMetal] = useState<"gold" | "silver" | "platinum">("gold");
   const [formPrice, setFormPrice] = useState("");
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function PriceAlert({ market }: PriceAlertProps) {
   }, []);
 
   const checkAlerts = useCallback(() => {
-    const prices = { gold: market.goldPrice, silver: market.silverPrice, copper: market.copperPrice };
+    const prices = { gold: market.goldPrice, silver: market.silverPrice, platinum: market.platinumPrice };
     const hits: { metal: string; target: number }[] = [];
     const remaining: AlertTarget[] = [];
 
@@ -122,12 +122,12 @@ export default function PriceAlert({ market }: PriceAlertProps) {
         <div className="flex gap-2 mb-3 flex-wrap">
           <select
             value={formMetal}
-            onChange={(e) => setFormMetal(e.target.value as "gold" | "silver" | "copper")}
+            onChange={(e) => setFormMetal(e.target.value as "gold" | "silver" | "platinum")}
             className="px-2 py-1.5 rounded-lg border border-gray-200 text-xs font-medium"
           >
             <option value="gold">Gold</option>
             <option value="silver">Silver</option>
-            <option value="copper">Copper</option>
+            <option value="platinum">Platinum</option>
           </select>
           <input
             type="number"

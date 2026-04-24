@@ -152,20 +152,19 @@ function generateFactors(
     });
   }
 
-  if (metal === "copper") {
-    const chinaNews = news.filter((n) => 
-      n.relevantCountries.includes("China") ||
-      /china|chinese|beijing|pboc|yuan|manufacturing pmi/i.test(n.title + " " + n.description)
+  if (metal === "platinum") {
+    const autoNews = news.filter((n) => 
+      /auto|automotive|vehicle|catalytic|converter|emission|hydrogen|fuel cell|ev|electric vehicle/i.test(n.title + " " + n.description)
     );
-    if (chinaNews.length > 0) {
-      const chinaSentiment = chinaNews.reduce((s, n) => s + n.sentiment, 0) / chinaNews.length;
-      const impact = chinaSentiment > 0.08 ? "bullish" : chinaSentiment < -0.08 ? "bearish" : "neutral";
+    if (autoNews.length > 0) {
+      const autoSentiment = autoNews.reduce((s, n) => s + n.sentiment, 0) / autoNews.length;
+      const impact = autoSentiment > 0.08 ? "bullish" : autoSentiment < -0.08 ? "bearish" : "neutral";
       
       factors.push({
-        name: "China Economic Outlook",
+        name: "Auto & Hydrogen Demand",
         impact,
         weight: 0.20,
-        description: `${chinaNews.length} China reports. China consumes ~50% of global copper. Sentiment: ${chinaSentiment > 0 ? "positive" : chinaSentiment < 0 ? "negative" : "neutral"}.`,
+        description: `${autoNews.length} auto/hydrogen reports. ~40% of platinum goes to catalytic converters. Hydrogen fuel cells are a growing demand driver.`,
       });
     }
   }
@@ -204,7 +203,7 @@ export async function generatePredictions(
 
   const enhancedNews = await enhanceNewsWithHF(news);
   
-  const metals: Array<"gold" | "silver" | "copper"> = ["gold", "silver", "copper"];
+  const metals: Array<"gold" | "silver" | "platinum"> = ["gold", "silver", "platinum"];
   const now = new Date();
 
   const results = metals.map((metal) => {

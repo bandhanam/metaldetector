@@ -24,11 +24,11 @@ const REALISTIC_BOUNDS = {
     monthly: { min: 0.018, max: 0.12, typical: 0.042 },
     quarterly: { min: 0.035, max: 0.18, typical: 0.075 },
   },
-  copper: {
-    daily: { min: 0.001, max: 0.032, typical: 0.009 },
-    weekly: { min: 0.005, max: 0.055, typical: 0.019 },
-    monthly: { min: 0.014, max: 0.10, typical: 0.038 },
-    quarterly: { min: 0.030, max: 0.16, typical: 0.065 },
+  platinum: {
+    daily: { min: 0.002, max: 0.03, typical: 0.009 },
+    weekly: { min: 0.005, max: 0.055, typical: 0.02 },
+    monthly: { min: 0.015, max: 0.10, typical: 0.04 },
+    quarterly: { min: 0.03, max: 0.16, typical: 0.07 },
   },
 };
 
@@ -167,13 +167,14 @@ function getIndianSeasonalFactor(metal: string, targetDate: Date): number {
     return factor * (metal === "silver" ? 0.7 : 1.0);
   }
 
-  // Copper: industrial metal, monsoon/construction seasonality
-  const copperSeasonal: Record<number, number> = {
-    0: 0.003, 1: 0.005, 2: 0.006, 3: 0.004,
-    4: 0.002, 5: -0.003, 6: -0.005, 7: -0.002,
-    8: 0.003, 9: 0.004, 10: 0.003, 11: 0.002,
+  // Platinum: precious + industrial (catalytic converters, jewellery, hydrogen fuel cells)
+  // Demand tracks auto production cycles and wedding season jewellery
+  const platinumSeasonal: Record<number, number> = {
+    0: 0.004, 1: 0.003, 2: 0.005, 3: 0.004,
+    4: 0.002, 5: -0.002, 6: -0.003, 7: 0.001,
+    8: 0.003, 9: 0.006, 10: 0.005, 11: 0.004,
   };
-  return copperSeasonal[month] || 0;
+  return platinumSeasonal[month] || 0;
 }
 
 // ── Mean-reversion Signal ──
@@ -215,13 +216,13 @@ function analyzeSentimentDirection(news: NewsArticle[], metal: string): {
     { regex: /war|military|attack|invasion|bomb|missile|troops|combat/i, directionAdj: -0.10, strengthAdj: 0, label: "conflict reports creating supply uncertainty" },
     { regex: /inflation|cpi|price surge|cost of living|consumer prices/i, directionAdj: 0.15, strengthAdj: 0, label: "inflation reports — metals as hedge" },
     { regex: /federal reserve|fed rate|interest rate|rate hike|rate cut|powell|fomc|monetary policy/i, directionAdj: 0, strengthAdj: 0, label: "Fed policy signals" },
-    { regex: /china|chinese|beijing|shanghai|yuan|renminbi/i, directionAdj: 0, strengthAdj: 0.1, label: "China reports — major copper consumer", metalFilter: "copper" },
+    { regex: /auto|automotive|vehicle|catalytic|hydrogen|fuel cell/i, directionAdj: 0.10, strengthAdj: 0.08, label: "auto/hydrogen reports — platinum demand driver", metalFilter: "platinum" },
     { regex: /dollar|dxy|greenback|usd strength|currency/i, directionAdj: 0, strengthAdj: 0, label: "USD reports — inverse correlation with metals" },
     { regex: /crisis|crash|collapse|panic|recession|depression|default|bankruptcy/i, directionAdj: 0.30, strengthAdj: 0.2, label: "crisis reports — flight to safety", metalFilter: "gold" },
     { regex: /crisis|crash|collapse|panic|recession|depression|default|bankruptcy/i, directionAdj: -0.15, strengthAdj: 0, label: "crisis reports — demand concerns" },
     { regex: /mining|production|supply|shortage|stockpile|inventory|output/i, directionAdj: 0.12, strengthAdj: 0, label: "supply disruption reports" },
     { regex: /tariff|trade war|import duty|protectionism|embargo/i, directionAdj: 0.10, strengthAdj: 0.08, label: "trade policy uncertainty" },
-    { regex: /green energy|solar|ev|electric vehicle|renewable|clean energy/i, directionAdj: 0.08, strengthAdj: 0.05, label: "green energy demand for industrial metals", metalFilter: "copper" },
+    { regex: /green energy|solar|ev|electric vehicle|renewable|clean energy|hydrogen/i, directionAdj: 0.10, strengthAdj: 0.06, label: "green energy/hydrogen driving platinum demand", metalFilter: "platinum" },
     { regex: /green energy|solar|ev|electric vehicle|renewable|clean energy/i, directionAdj: 0.06, strengthAdj: 0.03, label: "green energy driving silver demand", metalFilter: "silver" },
     { regex: /central bank.*buy|reserve.*gold|official.*purchase/i, directionAdj: 0.18, strengthAdj: 0.1, label: "central bank gold buying", metalFilter: "gold" },
   ];

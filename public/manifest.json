@@ -1,7 +1,7 @@
 {
-  "name": "Metal Detector - Live Gold, Silver & Copper Prices",
+  "name": "Metal Detector - Live Gold, Silver & Platinum Prices",
   "short_name": "Metal Detector",
-  "description": "AI-powered live gold, silver & copper price predictions with real-time rates for India and global markets.",
+  "description": "AI-powered live gold, silver & platinum price predictions with real-time rates for India and global markets.",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",

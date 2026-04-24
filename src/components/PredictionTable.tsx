@@ -29,7 +29,7 @@ export default function PredictionTable({ prediction, market }: PredictionTableP
       ? market.goldPrice
       : prediction.metal === "silver"
         ? market.silverPrice
-        : market.copperPrice;
+        : market.platinumPrice;
 
   const unit = prediction.metal === "gold" ? "10g" : "kg";
 

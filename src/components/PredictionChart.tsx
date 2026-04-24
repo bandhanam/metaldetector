@@ -23,7 +23,7 @@ const METAL_CHART_COLORS: Record<
 > = {
   gold: { main: "#FFD700", gradient1: "#FFD700", gradient2: "#B8860B" },
   silver: { main: "#C0C0C0", gradient1: "#E8E8E8", gradient2: "#808080" },
-  copper: { main: "#B87333", gradient1: "#D4956A", gradient2: "#8B4513" },
+  platinum: { main: "#818CF8", gradient1: "#A5B4FC", gradient2: "#4338CA" },
 };
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
@@ -43,7 +43,7 @@ export default function PredictionChart({ prediction, market }: PredictionChartP
       ? market.goldPrice
       : prediction.metal === "silver"
         ? market.silverPrice
-        : market.copperPrice;
+        : market.platinumPrice;
 
   const chartData = [
     {

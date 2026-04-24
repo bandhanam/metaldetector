@@ -13,13 +13,13 @@ interface CountryPriceCardProps {
 const METAL_ICONS: Record<string, string> = {
   gold: "🥇",
   silver: "🥈",
-  copper: "🥉",
+  platinum: "💎",
 };
 
 const HINDI_NAMES: Record<string, string> = {
   gold: "सोने का भाव",
   silver: "चांदी का भाव",
-  copper: "तांबे का भाव",
+  platinum: "प्लैटिनम का भाव",
 };
 
 const METAL_COLORS: Record<string, { gradient: string; glow: string; selectedBg: string; selectedBorder: string; ctaBg: string; ctaText: string; accentBar: string }> = {
@@ -41,14 +41,14 @@ const METAL_COLORS: Record<string, { gradient: string; glow: string; selectedBg:
     ctaText: "text-white",
     accentBar: "linear-gradient(to right, #94a3b8, #475569)",
   },
-  copper: {
-    gradient: "from-orange-400 via-amber-600 to-orange-700",
-    glow: "shadow-orange-200",
-    selectedBg: "bg-orange-50",
-    selectedBorder: "border-orange-400",
-    ctaBg: "bg-orange-600 hover:bg-orange-700",
+  platinum: {
+    gradient: "from-indigo-300 via-purple-400 to-indigo-500",
+    glow: "shadow-indigo-200",
+    selectedBg: "bg-indigo-50",
+    selectedBorder: "border-indigo-400",
+    ctaBg: "bg-indigo-600 hover:bg-indigo-700",
     ctaText: "text-white",
-    accentBar: "linear-gradient(to right, #f97316, #8B4513)",
+    accentBar: "linear-gradient(to right, #818cf8, #4338ca)",
   },
 };
 
@@ -91,9 +91,9 @@ export default function CountryPriceCard({
       ? market.goldPrice
       : prediction.metal === "silver"
         ? market.silverPrice
-        : market.copperPrice;
+        : market.platinumPrice;
 
-  const unit = prediction.metal === "gold" ? "10g" : "kg";
+  const unit = prediction.metal === "silver" ? "kg" : "10g";
   const hindiName = market.countryCode === "IN" ? HINDI_NAMES[prediction.metal] : null;
 
   const [yesterdayChange, setYesterdayChange] = useState<number | null>(null);

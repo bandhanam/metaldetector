@@ -10,7 +10,7 @@ interface CurrentRateCardProps {
 const METAL_COLORS: Record<string, string> = {
   gold: "from-yellow-400 via-amber-500 to-yellow-600",
   silver: "from-gray-300 via-slate-400 to-gray-500",
-  copper: "from-orange-400 via-amber-600 to-orange-700",
+  platinum: "from-indigo-300 via-purple-400 to-indigo-500",
 };
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
@@ -24,7 +24,7 @@ const CURRENCY_SYMBOLS: Record<string, string> = {
 const METAL_ICONS: Record<string, string> = {
   gold: "🥇",
   silver: "🥈",
-  copper: "🥉",
+  platinum: "💎",
 };
 
 export default function CurrentRateCard({ prediction, market }: CurrentRateCardProps) {
@@ -33,7 +33,7 @@ export default function CurrentRateCard({ prediction, market }: CurrentRateCardP
       ? market.goldPrice
       : prediction.metal === "silver"
         ? market.silverPrice
-        : market.copperPrice;
+        : market.platinumPrice;
 
   const unit = prediction.metal === "gold" ? "10g" : "kg";
   const gradient = METAL_COLORS[prediction.metal];

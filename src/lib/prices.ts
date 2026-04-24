@@ -1,15 +1,14 @@
 import { MetalPrice, MarketData } from "@/types";
 
 const TROY_OZ_TO_GRAMS = 31.1035;
-const LB_TO_KG = 2.20462;
 const MEMORY_CACHE_TTL_MS = 60_000;
 
 interface AllCountryPrices {
-  IN: { gold: number; silver: number; copper: number };
-  CN: { gold: number; silver: number; copper: number };
-  US: { gold: number; silver: number; copper: number };
-  EU: { gold: number; silver: number; copper: number };
-  JP: { gold: number; silver: number; copper: number };
+  IN: { gold: number; silver: number; platinum: number };
+  CN: { gold: number; silver: number; platinum: number };
+  US: { gold: number; silver: number; platinum: number };
+  EU: { gold: number; silver: number; platinum: number };
+  JP: { gold: number; silver: number; platinum: number };
 }
 
 interface ExchangeRates {
@@ -22,7 +21,7 @@ interface ExchangeRates {
 interface MetalSpotUSD {
   gold_per_oz: number;
   silver_per_oz: number;
-  copper_per_lb: number;
+  platinum_per_oz: number;
 }
 
 let cachedPrices: MetalPrice[] | null = null;
@@ -37,11 +36,14 @@ async function fetchLiveSpotPrices(): Promise<MetalSpotUSD | null> {
     if (!res.ok) return null;
     const data = await res.json();
     const p = data?.prices;
-    if (!p?.gold?.price_per_oz || !p?.silver?.price_per_oz || !p?.copper?.price_per_lb) return null;
+    if (!p?.gold?.price_per_oz || !p?.silver?.price_per_oz) return null;
+
+    const platinumPrice = p?.platinum?.price_per_oz || 0;
+
     return {
       gold_per_oz: p.gold.price_per_oz,
       silver_per_oz: p.silver.price_per_oz,
-      copper_per_lb: p.copper.price_per_lb,
+      platinum_per_oz: platinumPrice,
     };
   } catch {
     return null;
@@ -67,33 +69,34 @@ async function fetchExchangeRates(): Promise<ExchangeRates | null> {
 function convertToLocalPrices(spot: MetalSpotUSD, fx: ExchangeRates): AllCountryPrices {
   const goldPer10gUSD = (spot.gold_per_oz / TROY_OZ_TO_GRAMS) * 10;
   const silverPerKgUSD = (spot.silver_per_oz / TROY_OZ_TO_GRAMS) * 1000;
-  const copperPerKgUSD = spot.copper_per_lb * LB_TO_KG;
+  // Platinum priced per 10g (like gold — it's a precious metal)
+  const platinumPer10gUSD = (spot.platinum_per_oz / TROY_OZ_TO_GRAMS) * 10;
 
-  // India premiums: 6% import duty (post July 2024) + 3% GST + AIDC + landing costs
+  // India premiums: import duty + GST + AIDC + landing costs
   const INDIA_GOLD_PREMIUM = 1.071;
   const INDIA_SILVER_PREMIUM = 1.14;
-  const INDIA_COPPER_PREMIUM = 1.085;
+  const INDIA_PLATINUM_PREMIUM = 1.095; // ~6% import duty + 3% GST + small premium
 
   return {
-    US: { gold: round(goldPer10gUSD), silver: round(silverPerKgUSD), copper: round(copperPerKgUSD) },
+    US: { gold: round(goldPer10gUSD), silver: round(silverPerKgUSD), platinum: round(platinumPer10gUSD) },
     IN: {
       gold: round(goldPer10gUSD * fx.INR * INDIA_GOLD_PREMIUM),
       silver: round(silverPerKgUSD * fx.INR * INDIA_SILVER_PREMIUM),
-      copper: round(copperPerKgUSD * fx.INR * INDIA_COPPER_PREMIUM),
+      platinum: round(platinumPer10gUSD * fx.INR * INDIA_PLATINUM_PREMIUM),
     },
-    CN: { gold: round(goldPer10gUSD * fx.CNY), silver: round(silverPerKgUSD * fx.CNY), copper: round(copperPerKgUSD * fx.CNY) },
-    EU: { gold: round(goldPer10gUSD * fx.EUR), silver: round(silverPerKgUSD * fx.EUR), copper: round(copperPerKgUSD * fx.EUR) },
-    JP: { gold: round(goldPer10gUSD * fx.JPY), silver: round(silverPerKgUSD * fx.JPY), copper: round(copperPerKgUSD * fx.JPY) },
+    CN: { gold: round(goldPer10gUSD * fx.CNY), silver: round(silverPerKgUSD * fx.CNY), platinum: round(platinumPer10gUSD * fx.CNY) },
+    EU: { gold: round(goldPer10gUSD * fx.EUR), silver: round(silverPerKgUSD * fx.EUR), platinum: round(platinumPer10gUSD * fx.EUR) },
+    JP: { gold: round(goldPer10gUSD * fx.JPY), silver: round(silverPerKgUSD * fx.JPY), platinum: round(platinumPer10gUSD * fx.JPY) },
   };
 }
 
 function getFallback(): AllCountryPrices {
   return {
-    IN: { gold: 150144, silver: 250000, copper: 1240 },
-    CN: { gold: 10360, silver: 16170, copper: 85 },
-    US: { gold: 1503, silver: 2347, copper: 12.3 },
-    EU: { gold: 1304, silver: 2036, copper: 10.7 },
-    JP: { gold: 239900, silver: 374600, copper: 1962 },
+    IN: { gold: 150144, silver: 250000, platinum: 32000 },
+    CN: { gold: 10360, silver: 16170, platinum: 2200 },
+    US: { gold: 1503, silver: 2347, platinum: 320 },
+    EU: { gold: 1304, silver: 2036, platinum: 278 },
+    JP: { gold: 239900, silver: 374600, platinum: 51000 },
   };
 }
 
@@ -111,7 +114,7 @@ export async function fetchCurrentPrices(): Promise<MetalPrice[]> {
   const prices: MetalPrice[] = [
     { metal: "gold", price_usd: round(all.US.gold), price_inr: round(all.IN.gold), price_cny: round(all.CN.gold), price_eur: round(all.EU.gold), price_jpy: round(all.JP.gold), timestamp, source },
     { metal: "silver", price_usd: round(all.US.silver), price_inr: round(all.IN.silver), price_cny: round(all.CN.silver), price_eur: round(all.EU.silver), price_jpy: round(all.JP.silver), timestamp, source },
-    { metal: "copper", price_usd: round(all.US.copper), price_inr: round(all.IN.copper), price_cny: round(all.CN.copper), price_eur: round(all.EU.copper), price_jpy: round(all.JP.copper), timestamp, source },
+    { metal: "platinum", price_usd: round(all.US.platinum), price_inr: round(all.IN.platinum), price_cny: round(all.CN.platinum), price_eur: round(all.EU.platinum), price_jpy: round(all.JP.platinum), timestamp, source },
   ];
 
   cachedPrices = prices;
@@ -122,14 +125,14 @@ export async function fetchCurrentPrices(): Promise<MetalPrice[]> {
 export function getMarketData(prices: MetalPrice[]): MarketData[] {
   const gold = prices.find((p) => p.metal === "gold");
   const silver = prices.find((p) => p.metal === "silver");
-  const copper = prices.find((p) => p.metal === "copper");
+  const platinum = prices.find((p) => p.metal === "platinum");
 
   return [
-    { country: "India", countryCode: "IN", currency: "INR", goldPrice: gold?.price_inr || 0, silverPrice: silver?.price_inr || 0, copperPrice: copper?.price_inr || 0, gdpGrowth: 6.5, inflation: 5.1, centralBankRate: 6.5 },
-    { country: "China", countryCode: "CN", currency: "CNY", goldPrice: gold?.price_cny || 0, silverPrice: silver?.price_cny || 0, copperPrice: copper?.price_cny || 0, gdpGrowth: 4.8, inflation: 0.7, centralBankRate: 3.45 },
-    { country: "United States", countryCode: "US", currency: "USD", goldPrice: gold?.price_usd || 0, silverPrice: silver?.price_usd || 0, copperPrice: copper?.price_usd || 0, gdpGrowth: 2.5, inflation: 3.2, centralBankRate: 5.25 },
-    { country: "European Union", countryCode: "EU", currency: "EUR", goldPrice: gold?.price_eur || 0, silverPrice: silver?.price_eur || 0, copperPrice: copper?.price_eur || 0, gdpGrowth: 0.8, inflation: 2.6, centralBankRate: 4.5 },
-    { country: "Japan", countryCode: "JP", currency: "JPY", goldPrice: gold?.price_jpy || 0, silverPrice: silver?.price_jpy || 0, copperPrice: copper?.price_jpy || 0, gdpGrowth: 1.1, inflation: 2.8, centralBankRate: 0.25 },
+    { country: "India", countryCode: "IN", currency: "INR", goldPrice: gold?.price_inr || 0, silverPrice: silver?.price_inr || 0, platinumPrice: platinum?.price_inr || 0, gdpGrowth: 6.5, inflation: 5.1, centralBankRate: 6.5 },
+    { country: "China", countryCode: "CN", currency: "CNY", goldPrice: gold?.price_cny || 0, silverPrice: silver?.price_cny || 0, platinumPrice: platinum?.price_cny || 0, gdpGrowth: 4.8, inflation: 0.7, centralBankRate: 3.45 },
+    { country: "United States", countryCode: "US", currency: "USD", goldPrice: gold?.price_usd || 0, silverPrice: silver?.price_usd || 0, platinumPrice: platinum?.price_usd || 0, gdpGrowth: 2.5, inflation: 3.2, centralBankRate: 5.25 },
+    { country: "European Union", countryCode: "EU", currency: "EUR", goldPrice: gold?.price_eur || 0, silverPrice: silver?.price_eur || 0, platinumPrice: platinum?.price_eur || 0, gdpGrowth: 0.8, inflation: 2.6, centralBankRate: 4.5 },
+    { country: "Japan", countryCode: "JP", currency: "JPY", goldPrice: gold?.price_jpy || 0, silverPrice: silver?.price_jpy || 0, platinumPrice: platinum?.price_jpy || 0, gdpGrowth: 1.1, inflation: 2.8, centralBankRate: 0.25 },
   ];
 }
 

@@ -54,14 +54,14 @@ const METAL_WEIGHTS = {
     interestRate: -0.10,
     goldCorrelation: 0.20,
   },
-  copper: {
-    sentiment: 0.12,
-    geopoliticalRisk: 0.05,
-    economicStrength: 0.28,
-    chinaGrowth: 0.30,
-    industrialDemand: 0.25,
+  platinum: {
+    sentiment: 0.15,
+    geopoliticalRisk: 0.10,
+    economicStrength: 0.20,
+    autoDemand: 0.25,
+    hydrogenFuelCell: 0.20,
     supplyChain: 0.18,
-    construction: 0.15,
+    jewelleryDemand: 0.12,
   },
 };
 
@@ -404,7 +404,7 @@ class NeuralPredictor {
       this.weights[3][0] = 0.35;
       this.weights[0][1] = 0.25;
       this.weights[13][0] = 0.3;
-    } else if (metal === "copper") {
+    } else if (metal === "platinum") {
       this.weights[3][0] = 0.45;
       this.weights[6][0] = 0.3;
       this.weights[12][0] = 0.35;

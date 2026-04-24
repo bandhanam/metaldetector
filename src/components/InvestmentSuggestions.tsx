@@ -10,13 +10,13 @@ interface InvestmentSuggestionsProps {
 const METAL_ICONS: Record<string, string> = {
   gold: "🥇",
   silver: "🥈",
-  copper: "🥉",
+  platinum: "💎",
 };
 
 const METAL_LABELS: Record<string, string> = {
   gold: "Gold",
   silver: "Silver",
-  copper: "Copper",
+  platinum: "Platinum",
 };
 
 interface SuggestionData {

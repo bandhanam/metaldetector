@@ -72,14 +72,14 @@ function calculateFeatureScore(features: MLFeatures, metal: string): number {
       urgency: 0.10,
       newsVolume: 0.08,
     },
-    copper: {
-      sentiment: 0.20,
-      geopoliticalRisk: 0.05,
-      economicStrength: 0.30,
-      newsVolatility: 0.10,
+    platinum: {
+      sentiment: 0.22,
+      geopoliticalRisk: 0.10,
+      economicStrength: 0.20,
+      newsVolatility: 0.12,
       marketImpact: 0.15,
       urgency: 0.12,
-      newsVolume: 0.08,
+      newsVolume: 0.09,
     },
   };
 
@@ -173,7 +173,7 @@ export function calculateHistoricalVolatility(
     const defaults: Record<string, number> = {
       gold: 0.025,
       silver: 0.035,
-      copper: 0.028,
+      platinum: 0.030,
     };
     return defaults[metal] || 0.025;
   }

@@ -2,16 +2,17 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Metal Detector - Live Gold, Silver & Copper Prices India",
+  title: "Metal Detector - Live Gold, Silver & Platinum Prices India",
   description:
-    "Live gold price today in India per 10 gram. AI-powered Gold, Silver & Copper price predictions with real-time rates and market analysis.",
+    "Live gold price today in India per 10 gram. AI-powered Gold, Silver & Platinum price predictions with real-time rates and market analysis.",
   keywords: [
     "gold price today",
     "gold rate today India",
     "silver price today",
-    "copper price",
+    "platinum price",
     "gold prediction",
     "silver rate India",
+    "platinum rate India",
     "metal price live",
     "24 karat gold rate",
     "MCX gold",
@@ -68,7 +69,7 @@ export default function RootLayout({
               "@type": "WebApplication",
               name: "Metal Detector",
               url: "https://metaldetector-digger.vercel.app",
-              description: "AI-powered live gold, silver & copper price predictions with real-time rates for India and global markets.",
+              description: "AI-powered live gold, silver & platinum price predictions with real-time rates for India and global markets.",
               applicationCategory: "FinanceApplication",
               operatingSystem: "Web",
               offers: {
@@ -93,7 +94,7 @@ export default function RootLayout({
               mainEntity: [
                 {
                   "@type": "Question",
-                  name: "How often are the gold, silver, and copper prices updated?",
+                  name: "How often are the gold, silver, and platinum prices updated?",
                   acceptedAnswer: {
                     "@type": "Answer",
                     text: "Prices are updated in real-time, refreshing every 60 seconds from COMEX/LBMA spot markets with live INR exchange rates.",

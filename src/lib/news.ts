@@ -7,7 +7,7 @@ const NEWS_API_KEY =
 const METAL_KEYWORDS = {
   gold: ["gold price", "gold market", "gold reserve", "bullion", "gold ETF", "gold futures", "XAU"],
   silver: ["silver price", "silver market", "silver futures", "XAG", "silver demand"],
-  copper: ["copper price", "copper market", "copper futures", "copper demand", "HG copper"],
+  platinum: ["platinum price", "platinum market", "platinum futures", "platinum demand", "platinum group metals", "PGM"],
 };
 
 const MACRO_KEYWORDS = [
@@ -51,7 +51,7 @@ function detectMetals(text: string): string[] {
     if (keywords.some((k) => lower.includes(k.toLowerCase()))) metals.push(metal);
   }
   if (metals.length === 0 && MACRO_KEYWORDS.some((k) => lower.includes(k.toLowerCase()))) {
-    metals.push("gold", "silver", "copper");
+    metals.push("gold", "silver", "platinum");
   }
   return metals;
 }
@@ -107,7 +107,7 @@ export async function getNews(): Promise<NewsArticle[]> {
 // ─── STEP 2: One API call → store in DB → return ───
 export async function fetchAndStoreNews(): Promise<NewsArticle[]> {
   // More specific query focused on commodity trading and economics
-  const q = '("gold price" OR "gold prices" OR "silver price" OR "silver prices" OR "copper price" OR "copper prices" OR "precious metals" OR "commodity trading" OR "bullion" OR "metal markets") AND (trading OR investor OR commodity OR futures OR mcx OR comex OR lbma OR forex OR inflation OR "federal reserve" OR "central bank" OR mining OR rally OR decline OR forecast)';
+  const q = '("gold price" OR "gold prices" OR "silver price" OR "silver prices" OR "platinum price" OR "platinum prices" OR "precious metals" OR "commodity trading" OR "bullion" OR "metal markets") AND (trading OR investor OR commodity OR futures OR mcx OR comex OR lbma OR forex OR inflation OR "federal reserve" OR "central bank" OR mining OR rally OR decline OR forecast)';
 
   // Comprehensive exclusion list - anything NOT related to metal commodity trading
   const EXCLUDE_KEYWORDS = [
@@ -164,8 +164,8 @@ export async function fetchAndStoreNews(): Promise<NewsArticle[]> {
           lowerText.includes("gold prices") ||
           lowerText.includes("silver price") || 
           lowerText.includes("silver prices") ||
-          lowerText.includes("copper price") || 
-          lowerText.includes("copper prices") ||
+          lowerText.includes("platinum price") || 
+          lowerText.includes("platinum prices") ||
           lowerText.includes("precious metal") ||
           lowerText.includes("bullion") ||
           lowerText.includes("commodity market") ||

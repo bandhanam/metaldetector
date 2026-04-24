@@ -42,7 +42,7 @@ export default function Page() {
             Metal Detector — AI-Powered Intelligent Metal Price Forecast System
           </p>
           <p>
-            Units: Gold per 10g · Silver per kg · Copper per kg · Realtime live prices
+            Units: Gold per 10g · Silver per kg · Platinum per 10g · Realtime live prices
           </p>
         </div>
         <div className="flex items-center justify-center gap-4 mt-3 text-xs text-[var(--text-secondary)]">

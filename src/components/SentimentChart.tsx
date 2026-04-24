@@ -51,7 +51,7 @@ export default function SentimentChart({ predictions }: SentimentChartProps) {
   const COLORS: Record<string, string> = {
     Gold: "#FFD700",
     Silver: "#C0C0C0",
-    Copper: "#B87333",
+    Platinum: "#818CF8",
   };
 
   return (
@@ -134,9 +134,9 @@ export default function SentimentChart({ predictions }: SentimentChartProps) {
               strokeWidth={2}
             />
             <Radar
-              name="Copper"
-              dataKey="copper"
-              stroke="#B87333"
+              name="Platinum"
+              dataKey="platinum"
+              stroke="#818CF8"
               fill="#B87333"
               fillOpacity={0.1}
               strokeWidth={2}

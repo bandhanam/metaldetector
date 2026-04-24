@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "About - Metal Detector",
-  description: "About Metal Detector - AI-Powered live gold, silver & copper price predictions for India and global markets.",
+  description: "About Metal Detector - AI-Powered live gold, silver & platinum price predictions for India and global markets.",
 };
 
 export default function About() {
@@ -21,7 +21,7 @@ export default function About() {
         <div className="space-y-6 text-sm text-[var(--text-secondary)] leading-relaxed">
           <section>
             <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">What is Metal Detector?</h2>
-            <p>Metal Detector is an AI-powered precious metal price tracking and prediction platform. We provide real-time gold, silver, and copper prices for India and global markets, along with intelligent price forecasts powered by machine learning and news sentiment analysis.</p>
+            <p>Metal Detector is an AI-powered precious metal price tracking and prediction platform. We provide real-time gold, silver, and platinum prices for India and global markets, along with intelligent price forecasts powered by machine learning and news sentiment analysis.</p>
           </section>
 
           <section>

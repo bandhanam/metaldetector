@@ -40,7 +40,7 @@ export default function QuickPredictions({
       ? market.goldPrice
       : prediction.metal === "silver"
         ? market.silverPrice
-        : market.copperPrice;
+        : market.platinumPrice;
 
   const keyTimeframes = [
     { label: "Tomorrow", index: 0 },

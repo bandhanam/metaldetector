@@ -41,9 +41,9 @@ const mockPrices: MetalPrice[] = [
     source: "test",
   },
   {
-    metal: "copper",
-    price_usd: 23.04,
-    price_inr: 1970,
+    metal: "platinum",
+    price_usd: 320,
+    price_inr: 32000,
     price_cny: 167,
     price_eur: 21.2,
     price_jpy: 3491,
@@ -74,14 +74,14 @@ const mockNews: NewsArticle[] = [
     relevantCountries: ["US"],
   },
   {
-    title: "China copper demand weakens amid slowdown",
-    description: "Industrial metal prices decline as Chinese manufacturing contracts",
+    title: "Platinum demand weakens as auto sector slows",
+    description: "Precious metal prices decline as automotive manufacturing contracts",
     url: "https://example.com/3",
     source: "CNBC",
     publishedAt: new Date().toISOString(),
     sentiment: -0.2,
-    relevantMetals: ["copper"],
-    relevantCountries: ["China"],
+    relevantMetals: ["platinum"],
+    relevantCountries: [],
   },
 ];
 
@@ -89,14 +89,14 @@ describe("generatePredictions", () => {
   it("should return predictions for all three metals", async () => {
     const predictions = await generatePredictions(mockPrices, mockNews);
     expect(predictions).toHaveLength(3);
-    expect(predictions.map((p) => p.metal)).toEqual(["gold", "silver", "copper"]);
+    expect(predictions.map((p) => p.metal)).toEqual(["gold", "silver", "platinum"]);
   });
 
   it("should include correct current prices", async () => {
     const predictions = await generatePredictions(mockPrices, mockNews);
     expect(predictions[0].currentPrice).toBe(1752);
     expect(predictions[1].currentPrice).toBe(22);
-    expect(predictions[2].currentPrice).toBe(23.04);
+    expect(predictions[2].currentPrice).toBe(320);
   });
 
   it("should generate predictions for all timeframes", async () => {
@@ -156,8 +156,8 @@ describe("aggregateSentiment", () => {
     expect(sentiment).toBeGreaterThan(0);
   });
 
-  it("should return negative sentiment for bearish copper news", () => {
-    const sentiment = aggregateSentiment(mockNews, "copper");
+  it("should return negative sentiment for bearish platinum news", () => {
+    const sentiment = aggregateSentiment(mockNews, "platinum");
     expect(sentiment).toBeLessThan(0);
   });
 

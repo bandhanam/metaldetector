@@ -1,5 +1,5 @@
 export interface MetalPrice {
-  metal: "gold" | "silver" | "copper";
+  metal: "gold" | "silver" | "platinum";
   price_usd: number;
   price_inr: number;
   price_cny: number;
@@ -21,7 +21,7 @@ export interface NewsArticle {
 }
 
 export interface PricePrediction {
-  metal: "gold" | "silver" | "copper";
+  metal: "gold" | "silver" | "platinum";
   currentPrice: number;
   predictions: TimeframePrediction[];
   confidence: number;
@@ -51,7 +51,7 @@ export interface MarketData {
   currency: string;
   goldPrice: number;
   silverPrice: number;
-  copperPrice: number;
+  platinumPrice: number;
   gdpGrowth: number;
   inflation: number;
   centralBankRate: number;

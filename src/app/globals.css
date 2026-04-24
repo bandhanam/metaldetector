@@ -5,8 +5,8 @@
   --gold-dark: #8B6914;
   --silver: #808080;
   --silver-dark: #606060;
-  --copper: #8B4513;
-  --copper-dark: #6B3410;
+  --platinum: #818CF8;
+  --platinum-dark: #4338CA;
   --bg-primary: #ffffff;
   --bg-secondary: #f8f9fa;
   --bg-card: #ffffff;
@@ -41,7 +41,7 @@ body {
 
 .metal-gold { --metal-color: var(--gold); --metal-dark: var(--gold-dark); }
 .metal-silver { --metal-color: var(--silver); --metal-dark: var(--silver-dark); }
-.metal-copper { --metal-color: var(--copper); --metal-dark: var(--copper-dark); }
+.metal-platinum { --metal-color: var(--platinum); --metal-dark: var(--platinum-dark); }
 
 .metal-badge {
   background: linear-gradient(135deg, var(--metal-color), var(--metal-dark));

@@ -22,7 +22,7 @@ export default function ShareButton({ market }: ShareButtonProps) {
       `Metal Rates Today (${date})`,
       `🥇 Gold: ${fmtPrice(market.goldPrice, market.currency)}/10g`,
       `🥈 Silver: ${fmtPrice(market.silverPrice, market.currency)}/kg`,
-      `🥉 Copper: ${fmtPrice(market.copperPrice, market.currency)}/kg`,
+      `💎 Platinum: ${fmtPrice(market.platinumPrice, market.currency)}/10g`,
       ``,
       `Live AI predictions & analysis:`,
       `https://metaldetector-digger.vercel.app`,

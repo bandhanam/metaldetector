@@ -18,7 +18,7 @@ interface ComparisonChartProps {
 
 export default function ComparisonChart({ predictions }: ComparisonChartProps) {
   const chartData = [
-    { name: "Now", gold: 0, silver: 0, copper: 0 },
+    { name: "Now", gold: 0, silver: 0, platinum: 0 },
     ...predictions[0]?.predictions.map((_, i) => {
       const point: Record<string, unknown> = {
         name: predictions[0].predictions[i].label,
@@ -81,8 +81,8 @@ export default function ComparisonChart({ predictions }: ComparisonChartProps) {
           />
           <Line
             type="monotone"
-            dataKey="copper"
-            stroke="#B87333"
+            dataKey="platinum"
+            stroke="#818CF8"
             strokeWidth={2.5}
             dot={{ fill: "#B87333", r: 3 }}
             activeDot={{ r: 5 }}

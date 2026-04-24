@@ -27,7 +27,7 @@ export default function Terms() {
 
           <section>
             <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">2. Nature of the Service</h2>
-            <p>Metal Detector provides AI-powered metal price data and predictions for <strong>informational purposes only</strong>. The Service displays live gold, silver, and copper prices along with market forecasts generated using machine learning models and news sentiment analysis.</p>
+            <p>Metal Detector provides AI-powered metal price data and predictions for <strong>informational purposes only</strong>. The Service displays live gold, silver, and platinum prices along with market forecasts generated using machine learning models and news sentiment analysis.</p>
           </section>
 
           <section>

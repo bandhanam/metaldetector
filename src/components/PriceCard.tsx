@@ -11,7 +11,7 @@ interface PriceCardProps {
 const METAL_ICONS: Record<string, string> = {
   gold: "🥇",
   silver: "🥈",
-  copper: "🥉",
+  platinum: "💎",
 };
 
 const METAL_COLORS: Record<string, { gradient: string; glow: string }> = {
@@ -23,8 +23,8 @@ const METAL_COLORS: Record<string, { gradient: string; glow: string }> = {
     gradient: "from-gray-300 via-slate-400 to-gray-500",
     glow: "shadow-gray-400/20",
   },
-  copper: {
-    gradient: "from-orange-400 via-amber-600 to-orange-700",
+  platinum: {
+    gradient: "from-indigo-300 via-purple-400 to-indigo-500",
     glow: "shadow-orange-500/20",
   },
 };
@@ -73,7 +73,7 @@ export default function PriceCard({
           ${prediction.currentPrice.toLocaleString("en-US", { minimumFractionDigits: 2 })}
         </p>
         <p className="text-xs text-[var(--text-secondary)] mt-1">
-          {prediction.metal === "copper" ? "USD / kg" : "USD / 10g"}
+          {prediction.metal === "silver" ? "USD / kg" : "USD / 10g"}
         </p>
       </div>
 
