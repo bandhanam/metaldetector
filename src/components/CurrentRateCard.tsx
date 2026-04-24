@@ -35,7 +35,7 @@ export default function CurrentRateCard({ prediction, market }: CurrentRateCardP
         ? market.silverPrice
         : market.platinumPrice;
 
-  const unit = prediction.metal === "gold" ? "10g" : "kg";
+  const unit = prediction.metal === "silver" ? "kg" : "10g";
   const gradient = METAL_COLORS[prediction.metal];
 
   return (

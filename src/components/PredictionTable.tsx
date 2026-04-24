@@ -31,7 +31,7 @@ export default function PredictionTable({ prediction, market }: PredictionTableP
         ? market.silverPrice
         : market.platinumPrice;
 
-  const unit = prediction.metal === "gold" ? "10g" : "kg";
+  const unit = prediction.metal === "silver" ? "kg" : "10g";
 
   return (
     <div className="glass-card p-4 md:p-6 overflow-x-auto">
